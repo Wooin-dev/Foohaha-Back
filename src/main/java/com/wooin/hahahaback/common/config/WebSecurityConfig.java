@@ -3,8 +3,9 @@ package com.wooin.hahahaback.common.config;
 import com.wooin.hahahaback.common.jwt.JwtAuthenticationFilter;
 import com.wooin.hahahaback.common.jwt.JwtAuthorizationFilter;
 import com.wooin.hahahaback.common.jwt.JwtUtil;
-import com.wooin.hahahaback.common.refreshtoken.repository.RefreshTokenRepository;
+import com.wooin.hahahaback.common.jwt.repository.TokenRepository;
 import com.wooin.hahahaback.common.security.UserDetailsServiceImpl;
+import com.wooin.hahahaback.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +26,8 @@ public class WebSecurityConfig {
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final TokenRepository tokenRepository;
+    private final UserRepository userRepository;
     private final CorsConfig corsConfig;
 
 
@@ -36,14 +38,14 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, refreshTokenRepository);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
         filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
         return filter;
     }
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(jwtUtil, userDetailsService, refreshTokenRepository);
+        return new JwtAuthorizationFilter(jwtUtil, userDetailsService, userRepository, tokenRepository);
     }
 
     @Bean
