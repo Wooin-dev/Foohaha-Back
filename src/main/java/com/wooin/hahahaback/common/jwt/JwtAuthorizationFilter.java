@@ -3,8 +3,8 @@ package com.wooin.hahahaback.common.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wooin.hahahaback.common.dto.ApiResponseDto;
 import com.wooin.hahahaback.common.exception.NotFoundException;
-import com.wooin.hahahaback.common.jwt.dto.TokenDto;
-import com.wooin.hahahaback.common.jwt.repository.TokenRepository;
+import com.wooin.hahahaback.common.jwt.entity.TokenInfo;
+import com.wooin.hahahaback.common.jwt.repository.TokenInfoRepository;
 import com.wooin.hahahaback.common.security.UserDetailsServiceImpl;
 import com.wooin.hahahaback.user.entity.User;
 import com.wooin.hahahaback.user.repository.UserRepository;
@@ -31,13 +31,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
     private final UserRepository userRepository;
-    private final TokenRepository tokenRepository;
+    private final TokenInfoRepository tokenInfoRepository;
 
-    public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService, UserRepository userRepository, TokenRepository tokenRepository) {
+    public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService, UserRepository userRepository, TokenInfoRepository tokenInfoRepository) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
         this.userRepository = userRepository;
-        this.tokenRepository = tokenRepository;
+        this.tokenInfoRepository = tokenInfoRepository;
     }
 
     @Override
@@ -59,9 +59,9 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     Claims infoFromRefreshToken = jwtUtil.getUserInfoFromToken(refreshToken);
 
                     String username = infoFromRefreshToken.getSubject();
-                    TokenDto foundTokenDto = findTokenDtoFromRedis(username);
+                    TokenInfo foundTokenInfo = findTokenDtoFromRedis(username);
 
-                    if (foundTokenDto.getRefreshToken().equals(refreshToken)) {
+                    if (foundTokenInfo.getRefreshToken().equals(refreshToken)) {
                         //재발급
                         User user = findUserByUsername(username);
                         tokens = jwtUtil.addJwtToCookie(user, res);
@@ -115,8 +115,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
 
-    private TokenDto findTokenDtoFromRedis(String username) {
-        return tokenRepository.findById(username).orElseThrow(()
+    private TokenInfo findTokenDtoFromRedis(String username) {
+        return tokenInfoRepository.findById(username).orElseThrow(()
                 -> new NotFoundException("Redis서버에서 RefreshToken 정보를 찾을 수 없습니다."));
     }
 

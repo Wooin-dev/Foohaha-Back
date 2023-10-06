@@ -3,10 +3,9 @@ package com.wooin.hahahaback.common.config;
 import com.wooin.hahahaback.common.jwt.JwtAuthenticationFilter;
 import com.wooin.hahahaback.common.jwt.JwtAuthorizationFilter;
 import com.wooin.hahahaback.common.jwt.JwtUtil;
-import com.wooin.hahahaback.common.jwt.repository.TokenRepository;
+import com.wooin.hahahaback.common.jwt.repository.TokenInfoRepository;
 import com.wooin.hahahaback.common.security.UserDetailsServiceImpl;
 import com.wooin.hahahaback.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,16 +19,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity // Spring Security 지원을 가능하게 함
-@RequiredArgsConstructor
 public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
-    private final TokenRepository tokenRepository;
+    private final TokenInfoRepository tokenInfoRepository;
     private final UserRepository userRepository;
     private final CorsConfig corsConfig;
 
+    public WebSecurityConfig(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService, AuthenticationConfiguration authenticationConfiguration, TokenInfoRepository tokenInfoRepository, UserRepository userRepository, CorsConfig corsConfig) {
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
+        this.authenticationConfiguration = authenticationConfiguration;
+        this.tokenInfoRepository = tokenInfoRepository;
+        this.userRepository = userRepository;
+        this.corsConfig = corsConfig;
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -45,7 +51,7 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(jwtUtil, userDetailsService, userRepository, tokenRepository);
+        return new JwtAuthorizationFilter(jwtUtil, userDetailsService, userRepository, tokenInfoRepository);
     }
 
     @Bean

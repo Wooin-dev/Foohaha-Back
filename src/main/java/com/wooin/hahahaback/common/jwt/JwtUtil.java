@@ -1,7 +1,7 @@
 package com.wooin.hahahaback.common.jwt;
 
-import com.wooin.hahahaback.common.jwt.dto.TokenDto;
-import com.wooin.hahahaback.common.jwt.repository.TokenRepository;
+import com.wooin.hahahaback.common.jwt.entity.TokenInfo;
+import com.wooin.hahahaback.common.jwt.repository.TokenInfoRepository;
 import com.wooin.hahahaback.user.entity.User;
 import com.wooin.hahahaback.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
@@ -24,8 +24,6 @@ import java.net.URLEncoder;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Slf4j(topic = "JwtUtil")
 @Component
@@ -46,7 +44,7 @@ public class JwtUtil {
     private final long ACCESS_TOKEN_TIME = ACCESS_TOKEN_TIME_SECONDS * 1000L; //2시간으로 세팅. 테스트시 임의로 수정해야함
 
     //Token 블랙 리스트
-    private final Set<String> tokenBlacklist = new HashSet<>();
+//    private final Set<String> tokenBlacklist = new HashSet<>(); //todo jwt 블랙리스트
 
     ////  Refresh Token 관련 멤버  ////
     public static final String REFRESH_TOKEN_HEADER = "Refresh-Token";
@@ -55,7 +53,6 @@ public class JwtUtil {
 
 
     @Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
-
     private String secretKey; //application.properties에 선언되어 있는 값을 가져온다.
     private Key key;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256; //알고리즘 설정
@@ -64,10 +61,10 @@ public class JwtUtil {
     public static final Logger logger = LoggerFactory.getLogger("JWT 관련 로그");
 
     // 빈 주입
-    private final TokenRepository tokenRepository;
+    private final TokenInfoRepository tokenInfoRepository;
 
-    public JwtUtil(TokenRepository tokenRepository) {
-        this.tokenRepository = tokenRepository;
+    public JwtUtil(TokenInfoRepository tokenInfoRepository) {
+        this.tokenInfoRepository = tokenInfoRepository;
     }
 
 
@@ -109,7 +106,7 @@ public class JwtUtil {
             res.addCookie(refreshTokenCookie);
 
             // Redis서버에 토큰값 쌍 저장. 유저정보를 키로 지정.
-            tokenRepository.save(new TokenDto(username, accessToken, refreshToken));
+            tokenInfoRepository.save(new TokenInfo(username, accessToken, refreshToken));
 
         } catch (UnsupportedEncodingException e) {
             logger.error(e.getMessage());
@@ -208,14 +205,12 @@ public class JwtUtil {
 
 
     //블랙리스트에 추가
-    public void addTokenToBlacklist(String token) {
-        tokenBlacklist.add(token);
-    }
-
+//    public void addTokenToBlacklist(String token) {
+//        tokenBlacklist.add(token);
+//    }
 
     //공백 변환 " " -> "%20"
     private String tokenSpaceEncode(String token) throws UnsupportedEncodingException {
         return URLEncoder.encode(token, "utf-8").replaceAll("\\+", "%20");
     }
-
 }
