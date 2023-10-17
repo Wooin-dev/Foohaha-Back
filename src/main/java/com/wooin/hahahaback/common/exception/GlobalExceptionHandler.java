@@ -20,6 +20,12 @@ public class GlobalExceptionHandler {
                 .body(new ApiResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage()));
     }
 
+    @ExceptionHandler(NoAuthorizedException.class)
+    public ResponseEntity<ApiResponseDto> handleNoAuthorizationException(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ApiResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage()));
+    }
+
     @ExceptionHandler(IllegalAccessException.class)
     public ResponseEntity<ApiResponseDto> handleIllegalAccessException(IllegalAccessException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

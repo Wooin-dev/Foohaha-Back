@@ -1,12 +1,14 @@
 package com.wooin.hahahaback.quiz.controller;
 
 import com.wooin.hahahaback.common.dto.ApiResponseDto;
+import com.wooin.hahahaback.common.security.UserDetailsImpl;
 import com.wooin.hahahaback.quiz.dto.QuizRequestDto;
 import com.wooin.hahahaback.quiz.dto.QuizResponseDto;
 import com.wooin.hahahaback.quiz.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -21,21 +23,13 @@ public class QuizController {
 
     @PostMapping("/quizzes")
     public ResponseEntity<ApiResponseDto> createQuiz(
-//          @AuthenticationPrincipal UserDetailsImpl userDetails,
+          @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody QuizRequestDto requestDto) {
 
-        QuizResponseDto responseDto = quizService.createQuiz(requestDto);
+        QuizResponseDto responseDto = quizService.createQuiz(userDetails.getUser(), requestDto);
 
         return ResponseEntity.ok().body(new ApiResponseDto(HttpStatus.CREATED.value(),
                 responseDto.getQuestion() + " 퀴즈가 등록되었습니다."));
-    }
-
-    @GetMapping("/quizzes/{quizId}")
-    public ResponseEntity<QuizResponseDto> selectOneQuiz(@PathVariable Long quizId) {
-
-        QuizResponseDto responseDto = quizService.selectOneQuiz(quizId);
-
-        return ResponseEntity.ok(responseDto);
     }
 
     @GetMapping("/quizzes")
@@ -44,6 +38,14 @@ public class QuizController {
         List<QuizResponseDto> responseDtos = quizService.selectAllQuiz();
 
         return ResponseEntity.ok(responseDtos);
+    }
+
+    @GetMapping("/quizzes/{quizId}")
+    public ResponseEntity<QuizResponseDto> selectOneQuiz(@PathVariable Long quizId) {
+
+        QuizResponseDto responseDto = quizService.selectOneQuiz(quizId);
+
+        return ResponseEntity.ok(responseDto);
     }
 
 

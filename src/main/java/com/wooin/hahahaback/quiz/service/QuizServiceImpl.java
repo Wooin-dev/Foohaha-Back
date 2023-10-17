@@ -23,9 +23,9 @@ public class QuizServiceImpl implements QuizService{
 
     @Override
     @Transactional
-    public QuizResponseDto createQuiz(QuizRequestDto requestDto) {
+    public QuizResponseDto createQuiz(User user, QuizRequestDto requestDto) {
 
-        Quiz newQuiz = new Quiz(requestDto);
+        Quiz newQuiz = new Quiz(requestDto, user);
         Quiz savedQuiz = quizRepository.save(newQuiz);
 
         return new QuizResponseDto(savedQuiz);

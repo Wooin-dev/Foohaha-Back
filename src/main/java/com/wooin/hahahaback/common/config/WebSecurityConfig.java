@@ -9,6 +9,7 @@ import com.wooin.hahahaback.user.repository.UserRepository;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -68,19 +69,17 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-                        .requestMatchers("/api/**").permitAll() // todo 임시로 모든 접근 허용 이후 수정
-//                        .requestMatchers("/api/quizzes/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
-//                        .requestMatchers(HttpMethod.GET,"api/quizzes","/api/quizzes/**").permitAll()
-//                        .anyRequest().authenticated() // 그 외 모든 요청 인증처리
+                        .requestMatchers("/","/api/users").permitAll()
+                        .requestMatchers(HttpMethod.GET,"api/quizzes","/api/quizzes/**").permitAll()
+                        .anyRequest().authenticated() // 그 외 모든 요청 인증처리
 
         );
 
-        http.formLogin((formLogin) ->
-                formLogin
-                        .loginPage("/api/users/login-page")
-                        .defaultSuccessUrl("/api/posts")
-                        .permitAll()
-        );
+//        http.formLogin((formLogin) ->
+//                formLogin
+//                        .defaultSuccessUrl("/")
+//                        .permitAll()
+//        );
 
         // 필터 관리
         http.addFilter(corsConfig.corsFilter());
