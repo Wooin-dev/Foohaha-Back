@@ -2,6 +2,7 @@ package com.wooin.hahahaback.quiz.entity;
 
 import com.wooin.hahahaback.common.entity.Timestamped;
 import com.wooin.hahahaback.quiz.dto.QuizRequestDto;
+import com.wooin.hahahaback.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,9 +31,9 @@ public class Quiz extends Timestamped {
 
     ////연관관계
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 //
 //    @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true)
 //    private Set<QuizLike> quizLikeUsers= new HashSet<>();
@@ -40,14 +41,13 @@ public class Quiz extends Timestamped {
 //    @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true)
 //    private List<Reply> replys = new ArrayList<>();
 
-    public Quiz(QuizRequestDto requestDto) {
+    public Quiz(QuizRequestDto requestDto, User user) {
 
         this.question = requestDto.getQuestion();
         this.hint = requestDto.getHint();
         this.answer = requestDto.getAnswer();
         this.description = requestDto.getDescription();
-
-//        this.user = user;
+        this.user = user;
     }
 
     public void modifyQuiz(QuizRequestDto requestDto) {

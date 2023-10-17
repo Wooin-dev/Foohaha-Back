@@ -22,18 +22,9 @@ public class UserController {
         this.userService = userService;
     }
 
-    @ResponseBody
-    @GetMapping("/users/login-page")
-    public String loginPage(){
-        return "login하세요";
-    }
-
-
 
     @PostMapping("/users/signup") //@ModelAttribute는
     public ResponseEntity<ApiResponseDto> signup(@Valid @RequestBody SignupRequestDto requestDto, HttpServletResponse response){
-
-        log.info("토큰값"+requestDto.getAdminToken());
 
         userService.signup(requestDto, response);
 

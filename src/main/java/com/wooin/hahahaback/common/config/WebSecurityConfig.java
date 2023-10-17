@@ -3,12 +3,13 @@ package com.wooin.hahahaback.common.config;
 import com.wooin.hahahaback.common.jwt.JwtAuthenticationFilter;
 import com.wooin.hahahaback.common.jwt.JwtAuthorizationFilter;
 import com.wooin.hahahaback.common.jwt.JwtUtil;
-import com.wooin.hahahaback.common.refreshtoken.repository.RefreshTokenRepository;
+import com.wooin.hahahaback.common.jwt.repository.TokenInfoRepository;
 import com.wooin.hahahaback.common.security.UserDetailsServiceImpl;
-import lombok.RequiredArgsConstructor;
+import com.wooin.hahahaback.user.repository.UserRepository;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,15 +20,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity // Spring Security 지원을 가능하게 함
-@RequiredArgsConstructor
 public class WebSecurityConfig {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final TokenInfoRepository tokenInfoRepository;
+    private final UserRepository userRepository;
     private final CorsConfig corsConfig;
 
+    public WebSecurityConfig(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService, AuthenticationConfiguration authenticationConfiguration, TokenInfoRepository tokenInfoRepository, UserRepository userRepository, CorsConfig corsConfig) {
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
+        this.authenticationConfiguration = authenticationConfiguration;
+        this.tokenInfoRepository = tokenInfoRepository;
+        this.userRepository = userRepository;
+        this.corsConfig = corsConfig;
+    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -36,14 +45,14 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, refreshTokenRepository);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
         filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
         return filter;
     }
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(jwtUtil, userDetailsService, refreshTokenRepository);
+        return new JwtAuthorizationFilter(jwtUtil, userDetailsService, userRepository, tokenInfoRepository);
     }
 
     @Bean
@@ -60,19 +69,17 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
-                        .requestMatchers("/api/**").permitAll() // todo 임시로 모든 접근 허용 이후 수정
-//                        .requestMatchers("/api/quizzes/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
-//                        .requestMatchers(HttpMethod.GET,"api/quizzes","/api/quizzes/**").permitAll()
-//                        .anyRequest().authenticated() // 그 외 모든 요청 인증처리
+                        .requestMatchers("/","/api/users").permitAll()
+                        .requestMatchers(HttpMethod.GET,"api/quizzes","/api/quizzes/**").permitAll()
+                        .anyRequest().authenticated() // 그 외 모든 요청 인증처리
 
         );
 
-        http.formLogin((formLogin) ->
-                formLogin
-                        .loginPage("/api/users/login-page")
-                        .defaultSuccessUrl("/api/posts")
-                        .permitAll()
-        );
+//        http.formLogin((formLogin) ->
+//                formLogin
+//                        .defaultSuccessUrl("/")
+//                        .permitAll()
+//        );
 
         // 필터 관리
         http.addFilter(corsConfig.corsFilter());

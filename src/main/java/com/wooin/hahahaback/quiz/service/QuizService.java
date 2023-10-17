@@ -2,6 +2,7 @@ package com.wooin.hahahaback.quiz.service;
 
 import com.wooin.hahahaback.quiz.dto.QuizRequestDto;
 import com.wooin.hahahaback.quiz.dto.QuizResponseDto;
+import com.wooin.hahahaback.user.entity.User;
 
 import java.util.List;
 
@@ -9,10 +10,12 @@ public interface QuizService {
 
     /**
      * 퀴즈 등록
-     * @param requestDto    질문, 힌트, 정답, 유사정답들
-     * @return              PK번호를 포함한 퀴즈 정보 리턴
+     *
+     * @param userDetails
+     * @param requestDto  질문, 힌트, 정답, 유사정답들
+     * @return PK번호를 포함한 퀴즈 정보 리턴
      */
-    QuizResponseDto createQuiz(QuizRequestDto requestDto);
+    QuizResponseDto createQuiz(User userDetails, QuizRequestDto requestDto);
 
 
     /**
@@ -24,9 +27,7 @@ public interface QuizService {
 
     List<QuizResponseDto> selectAllQuiz();
 
-//    QuizResponseDto modifyQuiz(User user, Long quizId, QuizRequestDto requestDto);
-    QuizResponseDto modifyQuiz(Long quizId, QuizRequestDto requestDto);
+    QuizResponseDto modifyQuiz(User user, Long quizId, QuizRequestDto requestDto);
 
-//    void deleteQuiz(Long quizId, User user);
-    void deleteQuiz(Long quizId);
+    void deleteQuiz(Long quizId, User user);
 }
