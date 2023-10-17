@@ -27,9 +27,7 @@ public interface QuizService {
 
     List<QuizResponseDto> selectAllQuiz();
 
-//    QuizResponseDto modifyQuiz(User user, Long quizId, QuizRequestDto requestDto);
-    QuizResponseDto modifyQuiz(Long quizId, QuizRequestDto requestDto);
+    QuizResponseDto modifyQuiz(User user, Long quizId, QuizRequestDto requestDto);
 
-//    void deleteQuiz(Long quizId, User user);
-    void deleteQuiz(Long quizId);
+    void deleteQuiz(Long quizId, User user);
 }

@@ -1,5 +1,6 @@
 package com.wooin.hahahaback.quiz.service;
 
+import com.wooin.hahahaback.common.exception.NoAuthorizedException;
 import com.wooin.hahahaback.common.exception.NotFoundException;
 import com.wooin.hahahaback.quiz.dto.QuizRequestDto;
 import com.wooin.hahahaback.quiz.dto.QuizResponseDto;
@@ -48,31 +49,27 @@ public class QuizServiceImpl implements QuizService{
 
     @Override
     @Transactional
-    public QuizResponseDto modifyQuiz(Long quizId, QuizRequestDto requestDto) {
-
+    public QuizResponseDto modifyQuiz(User user, Long quizId, QuizRequestDto requestDto) {
         Quiz foundQuiz = findQuizById(quizId);
-//        User foundUser = findUserById(user.getId());
 
-//        if (!foundUser.getNickname().equals(foundQuiz.getUser().getNickname())) {
-//            throw new NoAuthorizedException("수정할 수 없는 사용자입니다.");
-//        }
+        checkUserAuthorization(user, foundQuiz);
+
         foundQuiz.modifyQuiz(requestDto);
         return new QuizResponseDto(foundQuiz);
     }
 
 
+
+
     @Override
     @Transactional
-    public void deleteQuiz(Long quizId) {
+    public void deleteQuiz(Long quizId, User user) {
 
         Quiz foundQuiz = findQuizById(quizId);
 
+        checkUserAuthorization(user, foundQuiz);
+
         quizRepository.deleteById(quizId);
-
-//        if (!user.getNickname().equals(foundQuiz.getUser().getNickname())) {
-//            throw new NoAuthorizedException("수정할 수 없는 사용자입니다.");
-//        }
-
 
 
     }
@@ -89,6 +86,9 @@ public class QuizServiceImpl implements QuizService{
         return userRepository.findById(userId).orElseThrow(()
                 -> new NotFoundException(userId + " : 유저를 찾을 수 없습니다."));
     }
-
-
+    private void checkUserAuthorization(User user, Quiz foundQuiz) {
+        if (!user.getId().equals(foundQuiz.getUser().getId())) {
+            throw new NoAuthorizedException("권한이 없습니다.");
+        }
+    }
 }

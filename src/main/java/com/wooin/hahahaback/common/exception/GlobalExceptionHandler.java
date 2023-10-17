@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NoAuthorizedException.class)
-    public ResponseEntity<ApiResponseDto> handleNoAuthorizationException(NotFoundException ex) {
+    public ResponseEntity<ApiResponseDto> handleNoAuthorizationException(NoAuthorizedException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ApiResponseDto(HttpStatus.NOT_FOUND.value(), ex.getMessage()));
     }

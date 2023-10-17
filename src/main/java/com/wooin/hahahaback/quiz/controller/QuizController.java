@@ -51,12 +51,11 @@ public class QuizController {
 
     @PutMapping("/quizzes/{quizId}")
     public ResponseEntity<QuizResponseDto> modifyQuiz(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long quizId,
             @RequestBody QuizRequestDto requestDto) throws IOException {
 
-//        QuizResponseDto responseDto = quizService.modifyQuiz(userDetails.getUser(), quizId, requestDto);
-        QuizResponseDto responseDto = quizService.modifyQuiz(quizId, requestDto);
+        QuizResponseDto responseDto = quizService.modifyQuiz(userDetails.getUser(), quizId, requestDto);
 
         return ResponseEntity.ok(responseDto);
     }
@@ -64,11 +63,10 @@ public class QuizController {
 
     @DeleteMapping("/quizzes/{quizId}")
     public ResponseEntity<ApiResponseDto> deleteQuiz(
-//            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long quizId) {
 
-//        quizService.deleteQuiz(quizId, userDetails.getUser());
-        quizService.deleteQuiz(quizId);
+        quizService.deleteQuiz(quizId, userDetails.getUser());
 
         return ResponseEntity.ok().body(new ApiResponseDto(HttpStatus.OK.value(), quizId + "번 퀴즈가 삭제되었습니다."));
     }
