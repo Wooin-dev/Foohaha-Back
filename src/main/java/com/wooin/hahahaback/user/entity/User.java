@@ -34,6 +34,8 @@ public class User extends Timestamped {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    private Long kakaoId;
+
 
     ////생성자
     @Builder
@@ -43,6 +45,20 @@ public class User extends Timestamped {
         this.email = email;
         this.nickname = nickname;
         this.role = role;
+    }
+
+    public User(String username, String password, String email, String nickname, UserRoleEnum role, Long kakaoId) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.nickname = nickname;
+        this.role = role;
+        this.kakaoId = kakaoId;
+    }
+
+    public User kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
     }
 
 
