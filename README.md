@@ -12,7 +12,8 @@ https://lucid.app/lucidchart/ec2b6080-9697-4771-9254-20e8d4458497/edit?viewport_
 ## 🛹 init
 - 기본 CRUD 구현
 - 사용자 기능 추가
-- 🚩소셜 로그인 기능 추가
+- 소셜 로그인 기능 추가
+- 🚩로그인 기능 구현
 - RefreshToken 적용
 - 댓글기능 구현
 - 좋아요 기능 추가

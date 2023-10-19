@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wooin.hahahaback.common.jwt.JwtUtil;
 import com.wooin.hahahaback.socialLogin.dto.KakaoUserInfoDto;
+import com.wooin.hahahaback.user.dto.UserInfoResponseDto;
 import com.wooin.hahahaback.user.entity.User;
 import com.wooin.hahahaback.user.entity.UserRoleEnum;
 import com.wooin.hahahaback.user.repository.UserRepository;
@@ -35,7 +36,7 @@ public class KakaoLoginService {
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
 
-    public String[] kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException { //String code는 카카오로부터 받은 인가 코드
+    public UserInfoResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException { //String code는 카카오로부터 받은 인가 코드
         // 1. "인가 코드"로 "액세스 토큰" 요청. 액세스 토큰은 카카오 사용자 정보를 가져오기 위한 코드
         String accessToken = getToken(code);
         // 2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
@@ -47,7 +48,7 @@ public class KakaoLoginService {
 
         log.info("토큰정보" + tokens);
 
-        return tokens;
+        return new UserInfoResponseDto(kakaouser);
     }
 
 
