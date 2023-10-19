@@ -54,6 +54,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         jwtUtil.addJwtToCookie(user, response);
 
         //Body에 데이터 담기
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("utf-8");
+
         String userJson = new ObjectMapper().writeValueAsString(new UserInfoResponseDto(user));
         response.getWriter().write(userJson);
     }
