@@ -4,6 +4,7 @@ package com.wooin.hahahaback.common.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wooin.hahahaback.common.security.UserDetailsImpl;
 import com.wooin.hahahaback.user.dto.LoginRequestDto;
+import com.wooin.hahahaback.user.dto.UserInfoResponseDto;
 import com.wooin.hahahaback.user.entity.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,12 +46,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         log.info("로그인 성공 및 JWT 생성");
+
 
         User user = ((UserDetailsImpl) authResult.getPrincipal()).getUser();
         jwtUtil.addJwtToCookie(user, response);
 
+        //Body에 데이터 담기
+        String userJson = new ObjectMapper().writeValueAsString(new UserInfoResponseDto(user));
+        response.getWriter().write(userJson);
     }
 
     @Override

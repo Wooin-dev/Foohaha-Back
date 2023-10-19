@@ -100,13 +100,10 @@ public class JwtUtil {
             accessTokenCookie.setPath("/");
             Cookie refreshTokenCookie = new Cookie(REFRESH_TOKEN_HEADER, tokenSpaceEncode(refreshToken)); // Name-Value
             refreshTokenCookie.setPath("/"); // 유효기간은 토큰만료시간이 있어서 따로 설정은 우선 안했습니다.
-            Cookie usernameCookie = new Cookie("Login-Username", tokenSpaceEncode(user.getNickname())); // Name-Value
-            usernameCookie.setPath("/"); // 유효기간은 토큰만료시간이 있어서 따로 설정은 우선 안했습니다.
 
             // Response 객체에 Cookie 추가
             res.addCookie(accessTokenCookie);
             res.addCookie(refreshTokenCookie);
-            res.addCookie(usernameCookie);
 
             // Redis서버에 토큰값 쌍 저장. 유저정보를 키로 지정.
             tokenInfoRepository.save(new TokenInfo(username, accessToken, refreshToken));
