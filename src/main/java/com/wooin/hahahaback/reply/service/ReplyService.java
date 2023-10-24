@@ -38,6 +38,7 @@ public class ReplyService {
                 .contents(requestDto.getContents())
                 .user(user)
                 .quiz(gotQuiz)
+                .likeCount(0)
                 .build();
 
         Reply savedReply = replyRepository.save(createdReply);
