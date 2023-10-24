@@ -32,6 +32,9 @@ public class Quiz extends Timestamped {
     @Column
     private String description;
 
+    @Column
+    private Integer likeCount;
+
 
     ////연관관계
 
@@ -52,6 +55,7 @@ public class Quiz extends Timestamped {
         this.answer = requestDto.getAnswer();
         this.description = requestDto.getDescription();
         this.user = user;
+        this.likeCount = 0;
     }
 
     public void modifyQuiz(QuizRequestDto requestDto) {
@@ -59,5 +63,17 @@ public class Quiz extends Timestamped {
         if (!requestDto.getHint().isBlank()) this.hint = requestDto.getHint();
         if (!requestDto.getAnswer().isBlank()) this.answer = requestDto.getAnswer();
         if (!requestDto.getDescription().isBlank()) this.description = requestDto.getDescription();
+    }
+
+    public void hitLikeCount() {
+        //todo 이전 버전의 객체와 맞추기 위한 코드도 생각해볼 필요가 있다.
+        if (this.likeCount == null) {
+            this.likeCount=0;
+        }
+        this.likeCount++;
+    }
+
+    public void cancleLikeCount() {
+        this.likeCount--;
     }
 }
