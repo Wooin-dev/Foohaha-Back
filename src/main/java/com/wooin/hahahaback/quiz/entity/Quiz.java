@@ -2,11 +2,15 @@ package com.wooin.hahahaback.quiz.entity;
 
 import com.wooin.hahahaback.common.entity.Timestamped;
 import com.wooin.hahahaback.quiz.dto.QuizRequestDto;
+import com.wooin.hahahaback.reply.entity.Reply;
 import com.wooin.hahahaback.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -38,8 +42,8 @@ public class Quiz extends Timestamped {
 //    @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true)
 //    private Set<QuizLike> quizLikeUsers= new HashSet<>();
 //
-//    @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true)
-//    private List<Reply> replys = new ArrayList<>();
+    @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private List<Reply> replys = new ArrayList<>();
 
     public Quiz(QuizRequestDto requestDto, User user) {
 

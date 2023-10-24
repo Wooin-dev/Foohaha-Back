@@ -1,5 +1,6 @@
 package com.wooin.hahahaback.user.service;
 
+import com.wooin.hahahaback.common.exception.NotFoundException;
 import com.wooin.hahahaback.user.dto.SignupRequestDto;
 import com.wooin.hahahaback.user.entity.User;
 import com.wooin.hahahaback.user.entity.UserRoleEnum;
@@ -56,5 +57,11 @@ public class UserService {
                 .role(role)
                 .build();
         userRepository.save(user);
+    }
+
+    public User findUserById(Long id) {
+        User foundUser = userRepository.findById(id).orElseThrow(()
+                -> new NotFoundException("사용자를 찾을 수 없습니다."));
+        return foundUser;
     }
 }
