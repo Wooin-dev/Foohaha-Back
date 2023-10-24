@@ -23,9 +23,19 @@ public class ReplyController {
                                          @RequestBody ReplyRequestDto requestDto,
                                          @PathVariable(value = "id") Long quizId) {
 
-        ReplyResponseDto result = replyService.createReply(userDetails.getUser(), requestDto, quizId);
+        ReplyResponseDto responseDto = replyService.createReply(userDetails.getUser(), requestDto, quizId);
 
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.ok().body(responseDto);
+    }
+
+    @PutMapping("/replies/{id}")
+    public ResponseEntity<ReplyResponseDto> modifyReply(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                        @RequestBody ReplyRequestDto requestDto,
+                                                        @PathVariable(value = "id") Long replyId) {
+
+        ReplyResponseDto responseDto = replyService.modifyReply(userDetails.getUser(), requestDto, replyId);
+
+        return ResponseEntity.ok().body(responseDto);
     }
 
 

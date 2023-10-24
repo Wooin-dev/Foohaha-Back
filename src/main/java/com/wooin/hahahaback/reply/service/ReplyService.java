@@ -1,5 +1,7 @@
 package com.wooin.hahahaback.reply.service;
 
+import com.wooin.hahahaback.common.exception.NoAuthorizedException;
+import com.wooin.hahahaback.common.exception.NotFoundException;
 import com.wooin.hahahaback.quiz.entity.Quiz;
 import com.wooin.hahahaback.quiz.repository.QuizRepository;
 import com.wooin.hahahaback.reply.dto.ReplyRequestDto;
@@ -41,5 +43,29 @@ public class ReplyService {
         Reply savedReply = replyRepository.save(createdReply);
 
         return new ReplyResponseDto(savedReply);
+    }
+
+    @Transactional
+    public ReplyResponseDto modifyReply(User user, ReplyRequestDto requestDto, Long replyId) {
+        Reply foundReply = findReplyById(replyId);
+        checkUserAuthorization(user, foundReply);
+
+        foundReply.modifyReply(requestDto);
+
+        return new ReplyResponseDto(foundReply);
+    }
+
+
+
+
+    private Reply findReplyById(Long replyId) {
+        return replyRepository.findById(replyId)
+                .orElseThrow(()-> new NotFoundException("해당 댓글을 찾을 수 없습니다."));
+    }
+
+    private void checkUserAuthorization(User user, Reply foundReply) {
+        if (!user.getId().equals(foundReply.getUser().getId())) {
+            throw new NoAuthorizedException("권한이 없습니다.");
+        }
     }
 }

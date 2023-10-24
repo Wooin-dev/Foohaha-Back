@@ -2,6 +2,7 @@ package com.wooin.hahahaback.reply.entity;
 
 import com.wooin.hahahaback.common.entity.Timestamped;
 import com.wooin.hahahaback.quiz.entity.Quiz;
+import com.wooin.hahahaback.reply.dto.ReplyRequestDto;
 import com.wooin.hahahaback.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,4 +32,8 @@ public class Reply extends Timestamped {
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 
+
+    public void modifyReply(ReplyRequestDto requestDto) {
+        this.contents = requestDto.getContents();
+    }
 }
