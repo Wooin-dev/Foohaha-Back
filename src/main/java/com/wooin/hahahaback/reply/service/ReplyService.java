@@ -47,12 +47,22 @@ public class ReplyService {
 
     @Transactional
     public ReplyResponseDto modifyReply(User user, ReplyRequestDto requestDto, Long replyId) {
+
         Reply foundReply = findReplyById(replyId);
         checkUserAuthorization(user, foundReply);
 
         foundReply.modifyReply(requestDto);
 
         return new ReplyResponseDto(foundReply);
+    }
+
+    @Transactional
+    public void deleteReply(User user, Long replyId) {
+
+        Reply foundReply = findReplyById(replyId);
+        checkUserAuthorization(user, foundReply);
+
+        replyRepository.delete(foundReply);
     }
 
 
@@ -68,4 +78,5 @@ public class ReplyService {
             throw new NoAuthorizedException("권한이 없습니다.");
         }
     }
+
 }

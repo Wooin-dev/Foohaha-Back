@@ -1,9 +1,11 @@
 package com.wooin.hahahaback.reply.controller;
 
+import com.wooin.hahahaback.common.dto.ApiResponseDto;
 import com.wooin.hahahaback.common.security.UserDetailsImpl;
 import com.wooin.hahahaback.reply.dto.ReplyRequestDto;
 import com.wooin.hahahaback.reply.dto.ReplyResponseDto;
 import com.wooin.hahahaback.reply.service.ReplyService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -38,5 +40,13 @@ public class ReplyController {
         return ResponseEntity.ok().body(responseDto);
     }
 
+    @DeleteMapping("/replies/{id}")
+    public ResponseEntity<ApiResponseDto> deleteReply(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                      @PathVariable(value = "id") Long replyId) {
+
+        replyService.deleteReply(userDetails.getUser(), replyId);
+
+        return ResponseEntity.ok().body(new ApiResponseDto(HttpStatus.OK.value(), "댓글이 삭제되었습니다."));
+    }
 
 }
