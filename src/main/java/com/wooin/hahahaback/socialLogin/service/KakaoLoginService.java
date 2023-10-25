@@ -10,6 +10,7 @@ import com.wooin.hahahaback.user.dto.UserInfoResponseDto;
 import com.wooin.hahahaback.user.entity.User;
 import com.wooin.hahahaback.user.entity.UserRoleEnum;
 import com.wooin.hahahaback.user.repository.UserRepository;
+import com.wooin.hahahaback.userdata.service.UserDataService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,7 @@ public class KakaoLoginService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final UserDataService userDataService;
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
 
@@ -154,6 +156,7 @@ public class KakaoLoginService {
                 String nickname = kakaoUserInfo.getNickname();
 
                 kakaoUser = new User("kakao" + kakaoUserInfo.getNickname(), encodedPassword, email, nickname, UserRoleEnum.USER, kakaoId);
+                userDataService.createData(kakaoUser);
             }
 
             userRepository.save(kakaoUser);
