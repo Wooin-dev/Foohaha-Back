@@ -8,6 +8,7 @@ import com.wooin.hahahaback.quiz.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,10 +43,10 @@ public class QuizController {
 
     @GetMapping("/quizzes/{quizId}")
     public ResponseEntity<QuizResponseDto> selectOneQuiz(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @AuthenticationPrincipal @Nullable UserDetailsImpl userDetails,
             @PathVariable Long quizId) {
 
-        QuizResponseDto responseDto = quizService.selectOneQuiz(quizId, userDetails.getUser());
+        QuizResponseDto responseDto = quizService.selectOneQuiz(quizId, userDetails==null ? null : userDetails.getUser());
 
         return ResponseEntity.ok(responseDto);
     }
