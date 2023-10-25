@@ -5,6 +5,7 @@ import com.wooin.hahahaback.user.dto.SignupRequestDto;
 import com.wooin.hahahaback.user.entity.User;
 import com.wooin.hahahaback.user.entity.UserRoleEnum;
 import com.wooin.hahahaback.user.repository.UserRepository;
+import com.wooin.hahahaback.userdata.service.UserDataService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final UserDataService userDataService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -57,6 +59,7 @@ public class UserService {
                 .role(role)
                 .build();
         userRepository.save(user);
+        userDataService.createData(user);
     }
 
     public User findUserById(Long id) {
