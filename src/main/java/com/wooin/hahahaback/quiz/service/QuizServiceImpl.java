@@ -25,7 +25,9 @@ public class QuizServiceImpl implements QuizService{
     private final UserDataService userDataService;
     private final UserDataRepository userDataRepository;
 
-
+    ////////////
+    ////CRUD////
+    ////////////
     @Override
     @Transactional
     public QuizResponseDto createQuiz(User user, QuizRequestDto requestDto) {
@@ -67,7 +69,6 @@ public class QuizServiceImpl implements QuizService{
 
 
 
-
     @Override
     @Transactional
     public void deleteQuiz(Long quizId, User user) {
@@ -82,17 +83,26 @@ public class QuizServiceImpl implements QuizService{
     }
 
 
+    ////////////
+    ///MyPage///
+    ////////////
+
+    public List<Quiz> selectMyQuizzes(User user) {
+        return quizRepository.findByUser(user);
+    }
+
+
     //// Private 메소드
 
     private Quiz findQuizById(Long quizId) {
         return quizRepository.findById(quizId).orElseThrow(()
                 -> new NotFoundException(quizId + "번의 퀴즈를 찾을 수 없습니다."));
     }
-
     private User findUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(()
                 -> new NotFoundException(userId + " : 유저를 찾을 수 없습니다."));
     }
+
     private void checkUserAuthorization(User user, Quiz foundQuiz) {
         if (!user.getId().equals(foundQuiz.getUser().getId())) {
             throw new NoAuthorizedException("권한이 없습니다.");

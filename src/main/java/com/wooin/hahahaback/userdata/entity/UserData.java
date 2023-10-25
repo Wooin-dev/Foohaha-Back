@@ -16,11 +16,11 @@ public class UserData extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer showQuiz;
-    private Integer showHint;
-    private Integer solveQuiz;
+    private Integer showQuizCnt;
+    private Integer showHintCnt;
+    private Integer solveQuizCnt;
 
-    private Integer createQuiz;
+    private Integer createQuizCnt;
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -28,26 +28,26 @@ public class UserData extends Timestamped {
 
 
     public UserData(User user) {
-        this.showQuiz = 0;
-        this.showHint = 0;
-        this.solveQuiz = 0;
-        this.createQuiz = 0;
+        this.showQuizCnt = 0;
+        this.showHintCnt = 0;
+        this.solveQuizCnt = 0;
+        this.createQuizCnt = 0;
         this.user = user;
     }
 
     public Integer countShowQuiz() {
-        return this.showQuiz++;
+        return this.showQuizCnt++;
     }
 
     public Integer countShowHint() {
-        return this.showHint++;
+        return this.showHintCnt++;
     }
 
     public Integer countSolveQuiz() {
-        return this.solveQuiz++;
+        return this.solveQuizCnt++;
     }
 
     public Integer countCreateQuiz() {
-        return this.createQuiz++;
+        return this.createQuizCnt++;
     }
 }
