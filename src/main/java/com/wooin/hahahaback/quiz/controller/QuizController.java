@@ -41,9 +41,11 @@ public class QuizController {
     }
 
     @GetMapping("/quizzes/{quizId}")
-    public ResponseEntity<QuizResponseDto> selectOneQuiz(@PathVariable Long quizId) {
+    public ResponseEntity<QuizResponseDto> selectOneQuiz(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long quizId) {
 
-        QuizResponseDto responseDto = quizService.selectOneQuiz(quizId);
+        QuizResponseDto responseDto = quizService.selectOneQuiz(quizId, userDetails.getUser());
 
         return ResponseEntity.ok(responseDto);
     }

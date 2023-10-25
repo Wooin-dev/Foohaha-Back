@@ -8,6 +8,8 @@ import com.wooin.hahahaback.quiz.entity.Quiz;
 import com.wooin.hahahaback.quiz.repository.QuizRepository;
 import com.wooin.hahahaback.user.entity.User;
 import com.wooin.hahahaback.user.repository.UserRepository;
+import com.wooin.hahahaback.userdata.repository.UserDataRepository;
+import com.wooin.hahahaback.userdata.service.UserDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,8 @@ public class QuizServiceImpl implements QuizService{
 
     private final QuizRepository quizRepository;
     private final UserRepository userRepository;
+    private final UserDataService userDataService;
+    private final UserDataRepository userDataRepository;
 
 
     @Override
@@ -29,12 +33,15 @@ public class QuizServiceImpl implements QuizService{
         Quiz newQuiz = new Quiz(requestDto, user);
         Quiz savedQuiz = quizRepository.save(newQuiz);
 
+        userDataService.findUserDataByUser(user).countCreateQuiz();
+
         return new QuizResponseDto(savedQuiz);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public QuizResponseDto selectOneQuiz(Long quizId) {
+    @Transactional
+    public QuizResponseDto selectOneQuiz(Long quizId, User user) {
+        userDataService.findUserDataByUser(user).countShowQuiz();
         return new QuizResponseDto(findQuizById(quizId));
     }
 
