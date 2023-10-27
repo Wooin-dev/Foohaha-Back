@@ -2,6 +2,7 @@ package com.wooin.hahahaback.quiz.service;
 
 import com.wooin.hahahaback.quiz.dto.QuizRequestDto;
 import com.wooin.hahahaback.quiz.dto.QuizResponseDto;
+import com.wooin.hahahaback.quiz.dto.QuizThumbResponseDto;
 import com.wooin.hahahaback.user.entity.User;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public interface QuizService {
      */
     QuizResponseDto selectOneQuiz(Long quizId, User user);
 
-    List<QuizResponseDto> selectAllQuiz();
+    List<QuizThumbResponseDto> selectAllQuiz();
 
     QuizResponseDto modifyQuiz(User user, Long quizId, QuizRequestDto requestDto);
 

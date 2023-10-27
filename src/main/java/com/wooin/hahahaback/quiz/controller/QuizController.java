@@ -4,6 +4,7 @@ import com.wooin.hahahaback.common.dto.ApiResponseDto;
 import com.wooin.hahahaback.common.security.UserDetailsImpl;
 import com.wooin.hahahaback.quiz.dto.QuizRequestDto;
 import com.wooin.hahahaback.quiz.dto.QuizResponseDto;
+import com.wooin.hahahaback.quiz.dto.QuizThumbResponseDto;
 import com.wooin.hahahaback.quiz.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,9 +35,9 @@ public class QuizController {
     }
 
     @GetMapping("/quizzes")
-    public ResponseEntity<List<QuizResponseDto>> selectQuizList() {
+    public ResponseEntity<List<QuizThumbResponseDto>> selectQuizList() {
 
-        List<QuizResponseDto> responseDtos = quizService.selectAllQuiz();
+        List<QuizThumbResponseDto> responseDtos = quizService.selectAllQuiz();
 
         return ResponseEntity.ok(responseDtos);
     }
