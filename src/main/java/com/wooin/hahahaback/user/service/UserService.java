@@ -27,7 +27,7 @@ public class UserService {
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
 
-    public void signup(SignupRequestDto requestDto, HttpServletResponse res){
+    public void signup(SignupRequestDto requestDto, HttpServletResponse res) {
         //Dto -> 변수에 담기
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword()); // 암호화해서 할당
@@ -37,7 +37,7 @@ public class UserService {
         Optional<User> checkUsername = userRepository.findByUsername(username);
         if (checkUsername.isPresent()) {
             res.setStatus(400); //why 결국엔 redirect 되서 302로 덮어씌어짐.
-            res.addHeader("message","existed username");
+            res.addHeader("message", "existed username");
             throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
         }
 
@@ -48,7 +48,7 @@ public class UserService {
                 throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
             }
             role = UserRoleEnum.ADMIN;
-            log.info("role : "+role);
+            log.info("role : " + role);
         }
         //Repo에 저장
         User user = User.builder()
