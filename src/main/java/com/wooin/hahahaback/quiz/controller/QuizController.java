@@ -4,10 +4,12 @@ import com.wooin.hahahaback.common.dto.ApiResponseDto;
 import com.wooin.hahahaback.common.security.UserDetailsImpl;
 import com.wooin.hahahaback.quiz.dto.QuizRequestDto;
 import com.wooin.hahahaback.quiz.dto.QuizResponseDto;
+import com.wooin.hahahaback.quiz.dto.QuizThumbResponseDto;
 import com.wooin.hahahaback.quiz.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,19 +35,19 @@ public class QuizController {
     }
 
     @GetMapping("/quizzes")
-    public ResponseEntity<List<QuizResponseDto>> selectQuizList() {
+    public ResponseEntity<List<QuizThumbResponseDto>> selectQuizList() {
 
-        List<QuizResponseDto> responseDtos = quizService.selectAllQuiz();
+        List<QuizThumbResponseDto> responseDtos = quizService.selectAllQuiz();
 
         return ResponseEntity.ok(responseDtos);
     }
 
     @GetMapping("/quizzes/{quizId}")
     public ResponseEntity<QuizResponseDto> selectOneQuiz(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @AuthenticationPrincipal @Nullable UserDetailsImpl userDetails,
             @PathVariable Long quizId) {
 
-        QuizResponseDto responseDto = quizService.selectOneQuiz(quizId, userDetails.getUser());
+        QuizResponseDto responseDto = quizService.selectOneQuiz(quizId, userDetails==null ? null : userDetails.getUser());
 
         return ResponseEntity.ok(responseDto);
     }

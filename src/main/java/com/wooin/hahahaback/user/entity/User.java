@@ -1,6 +1,7 @@
 package com.wooin.hahahaback.user.entity;
 
 import com.wooin.hahahaback.common.entity.Timestamped;
+import com.wooin.hahahaback.mypage.dto.EditMyProfileRequestDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -56,9 +57,14 @@ public class User extends Timestamped {
         this.kakaoId = kakaoId;
     }
 
+    ////서비스 메소드
     public User kakaoIdUpdate(Long kakaoId) {
         this.kakaoId = kakaoId;
         return this;
+    }
+
+    public void editUser(EditMyProfileRequestDto requestDto) {
+        this.nickname = requestDto.getNickname();
     }
 
 

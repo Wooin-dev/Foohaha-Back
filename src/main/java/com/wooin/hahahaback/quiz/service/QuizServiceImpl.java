@@ -4,8 +4,10 @@ import com.wooin.hahahaback.common.exception.NoAuthorizedException;
 import com.wooin.hahahaback.common.exception.NotFoundException;
 import com.wooin.hahahaback.quiz.dto.QuizRequestDto;
 import com.wooin.hahahaback.quiz.dto.QuizResponseDto;
+import com.wooin.hahahaback.quiz.dto.QuizThumbResponseDto;
 import com.wooin.hahahaback.quiz.entity.Quiz;
 import com.wooin.hahahaback.quiz.repository.QuizRepository;
+import com.wooin.hahahaback.reply.repository.ReplyRepository;
 import com.wooin.hahahaback.user.entity.User;
 import com.wooin.hahahaback.user.repository.UserRepository;
 import com.wooin.hahahaback.userdata.repository.UserDataRepository;
@@ -24,6 +26,7 @@ public class QuizServiceImpl implements QuizService{
     private final UserRepository userRepository;
     private final UserDataService userDataService;
     private final UserDataRepository userDataRepository;
+    private final ReplyRepository replyRepository;
 
     ////////////
     ////CRUD////
@@ -43,17 +46,32 @@ public class QuizServiceImpl implements QuizService{
     @Override
     @Transactional
     public QuizResponseDto selectOneQuiz(Long quizId, User user) {
-        userDataService.findUserDataByUser(user).countShowQuiz();
+
+        if (user!=null) {
+            userDataService.findUserDataByUser(user).countShowQuiz();
+        }
         return new QuizResponseDto(findQuizById(quizId));
     }
 
 
     @Override
     @Transactional(readOnly = true)
-    public List<QuizResponseDto> selectAllQuiz() { //todo 페이징 처리
+    public List<QuizThumbResponseDto> selectAllQuiz() { //todo 페이징 처리
 
         List<Quiz> quizzes = quizRepository.findAll();
-        return quizzes.stream().map(QuizResponseDto::new).toList();
+        return quizzes.stream()
+//                .map(QuizThumbResponseDto::new)
+                .map(quiz -> {
+                    Integer countReplies = countReplies(quiz);
+                    var dto = new QuizThumbResponseDto(quiz);
+                    dto.setCntReplies(countReplies);
+                    return dto;
+                })
+                .toList();
+    }
+
+    public Integer countReplies(Quiz quiz) {
+        return replyRepository.countByQuiz(quiz);
     }
 
     @Override
