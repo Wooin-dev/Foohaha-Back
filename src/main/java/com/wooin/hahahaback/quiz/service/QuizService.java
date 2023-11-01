@@ -4,8 +4,8 @@ import com.wooin.hahahaback.quiz.dto.QuizRequestDto;
 import com.wooin.hahahaback.quiz.dto.QuizResponseDto;
 import com.wooin.hahahaback.quiz.dto.QuizThumbResponseDto;
 import com.wooin.hahahaback.user.entity.User;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface QuizService {
 
@@ -28,7 +28,8 @@ public interface QuizService {
      */
     QuizResponseDto selectOneQuiz(Long quizId, User user);
 
-    List<QuizThumbResponseDto> selectAllQuiz();
+    @Transactional(readOnly = true)
+    Page<QuizThumbResponseDto> selectQuizPage(int page, int size, String sortBy, boolean isAsc);
 
     QuizResponseDto modifyQuiz(User user, Long quizId, QuizRequestDto requestDto);
 

@@ -7,6 +7,7 @@ import com.wooin.hahahaback.quiz.dto.QuizResponseDto;
 import com.wooin.hahahaback.quiz.dto.QuizThumbResponseDto;
 import com.wooin.hahahaback.quiz.service.QuizService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -14,7 +15,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -35,9 +35,14 @@ public class QuizController {
     }
 
     @GetMapping("/quizzes")
-    public ResponseEntity<List<QuizThumbResponseDto>> selectQuizList() {
+    public ResponseEntity<Page<QuizThumbResponseDto>> selectQuizList(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("isAsc") boolean isAsc
+    ) {
 
-        List<QuizThumbResponseDto> responseDtos = quizService.selectAllQuiz();
+        Page<QuizThumbResponseDto> responseDtos = quizService.selectQuizPage(page-1, size, sortBy, isAsc);
 
         return ResponseEntity.ok(responseDtos);
     }
