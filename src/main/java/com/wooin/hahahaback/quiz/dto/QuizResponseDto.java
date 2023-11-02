@@ -15,6 +15,7 @@ public class QuizResponseDto {
     private String answer;
     private String description;
 
+    private Long authorId;
     private String author;
 
 //    private int totalScore;
@@ -28,6 +29,7 @@ public class QuizResponseDto {
         this.hint = quiz.getHint();
         this.answer = quiz.getAnswer();
         this.description = quiz.getDescription();
+        this.authorId = quiz.getUser().getId();
         this.author = quiz.getUser().getNickname();
 
         this.replies = quiz.getReplys().stream().map(ReplyResponseDto::new).toList();

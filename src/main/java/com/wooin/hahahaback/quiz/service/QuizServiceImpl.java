@@ -102,6 +102,7 @@ public class QuizServiceImpl implements QuizService{
         Quiz foundQuiz = findQuizById(quizId);
 
         checkUserAuthorization(user, foundQuiz);
+        userDataService.findUserDataByUser(user).discountCreateQuiz();
 
         quizRepository.deleteById(quizId);
 
