@@ -50,4 +50,7 @@ public class UserData extends Timestamped {
     public Integer countCreateQuiz() {
         return this.createQuizCnt++;
     }
+    public Integer discountCreateQuiz() {
+        return this.createQuizCnt--;
+    }
 }

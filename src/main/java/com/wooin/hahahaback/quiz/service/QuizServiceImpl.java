@@ -13,6 +13,10 @@ import com.wooin.hahahaback.user.repository.UserRepository;
 import com.wooin.hahahaback.userdata.repository.UserDataRepository;
 import com.wooin.hahahaback.userdata.service.UserDataService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,18 +60,22 @@ public class QuizServiceImpl implements QuizService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<QuizThumbResponseDto> selectAllQuiz() { //todo 페이징 처리
+    public Page<QuizThumbResponseDto> selectQuizPage(int page, int size, String sortBy, boolean isAsc) {
 
-        List<Quiz> quizzes = quizRepository.findAll();
-        return quizzes.stream()
-//                .map(QuizThumbResponseDto::new)
+        //페이징 처리
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+
+        Page<Quiz> quizzes = quizRepository.findAll(pageable);
+        return quizzes
                 .map(quiz -> {
                     Integer countReplies = countReplies(quiz);
                     var dto = new QuizThumbResponseDto(quiz);
                     dto.setCntReplies(countReplies);
                     return dto;
-                })
-                .toList();
+                });
     }
 
     public Integer countReplies(Quiz quiz) {
@@ -94,6 +102,7 @@ public class QuizServiceImpl implements QuizService{
         Quiz foundQuiz = findQuizById(quizId);
 
         checkUserAuthorization(user, foundQuiz);
+        userDataService.findUserDataByUser(user).discountCreateQuiz();
 
         quizRepository.deleteById(quizId);
 

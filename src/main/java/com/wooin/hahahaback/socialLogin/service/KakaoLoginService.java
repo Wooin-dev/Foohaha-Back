@@ -156,10 +156,9 @@ public class KakaoLoginService {
                 String nickname = kakaoUserInfo.getNickname();
 
                 kakaoUser = new User("kakao" + kakaoUserInfo.getNickname(), encodedPassword, email, nickname, UserRoleEnum.USER, kakaoId);
-                userDataService.createData(kakaoUser);
             }
-
             userRepository.save(kakaoUser);
+            userDataService.createData(kakaoUser);
         }
         return kakaoUser;
     }
