@@ -49,7 +49,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         log.info("로그인 성공 및 JWT 생성");
 
-
         User user = ((UserDetailsImpl) authResult.getPrincipal()).getUser();
         jwtUtil.addJwtToCookie(user, response);
 
