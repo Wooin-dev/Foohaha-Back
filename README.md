@@ -16,13 +16,14 @@ https://lucid.app/lucidchart/ec2b6080-9697-4771-9254-20e8d4458497/edit?viewport_
 - 소셜 로그인 기능 추가
 - 댓글기능 구현
 - 좋아요 기능 추가
+- https 적용
+- 배포
 - 마이페이지 기능 
   - 문제 풀이 통계 구성 (내가 풀은 문제, 못 풀은 문제, 내 점수 등)
   - 🚩 내가 만든 퀴즈 리스트
   - 나의 퀴즈 스탯 통계
 - RefreshToken 전략 Rotation 등 고안
-- https 적용
-- 배포
+
 
 
 ## 🛴 Basic feature
