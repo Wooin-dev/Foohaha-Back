@@ -15,6 +15,8 @@ public class ReplyResponseDto {
     private Long authorId;
     private LocalDateTime createdAt;
 
+    private Integer likesCnt;
+
     @Builder
     public ReplyResponseDto(Long id, String contents, String author, Long authorId, LocalDateTime createdAt) {
         this.id = id;
@@ -31,5 +33,6 @@ public class ReplyResponseDto {
         this.author = reply.getUser().getNickname();
         this.authorId = reply.getUser().getId();
         this.createdAt = reply.getCreatedAt();
+        this.likesCnt = reply.getLikesCnt();
     }
 }

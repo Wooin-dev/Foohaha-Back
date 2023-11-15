@@ -36,6 +36,11 @@ public class LikeService {
         return quizLikeRepository.existsByUserAndQuiz_Id(user, quizId);
     }
 
+    @Transactional(readOnly = true)
+    public Boolean isLikedReply(User user, Long replyId) {
+        return replyLikeRepository.existsByUserAndReply_Id(user, replyId);
+    }
+
     @Transactional
     public void likeQuiz(User user, Long quizId) {
 

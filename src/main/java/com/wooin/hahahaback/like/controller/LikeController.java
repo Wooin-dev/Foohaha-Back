@@ -46,6 +46,16 @@ public class LikeController {
     }
 
 
+
+    @GetMapping("/likes/replies/is-liked/{id}")
+    public ResponseEntity<Boolean> isLikedReply(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                               @PathVariable(value = "id") Long replyId) {
+
+        Boolean result = likeService.isLikedReply(userDetails.getUser(), replyId);
+
+        return ResponseEntity.ok().body(result);
+    }
+
     @GetMapping("/likes/replies/{id}")
     public ResponseEntity likeReply(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                    @PathVariable(value = "id") Long replyId) {

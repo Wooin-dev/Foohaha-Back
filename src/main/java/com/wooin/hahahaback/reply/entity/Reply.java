@@ -22,7 +22,7 @@ public class Reply extends Timestamped {
 
     private String contents;
 
-    private Integer likeCount;
+    private Integer likesCnt;
 
 
     ////연관관계 - Foreign Key 값을 따로 컬럼으로 정의하지 않고 연관 관계로 정의합니다.
@@ -40,13 +40,13 @@ public class Reply extends Timestamped {
     }
 
     public void hitLikeCount() {
-        this.likeCount = this.likeCount==null
+        this.likesCnt = this.likesCnt ==null
                 ? 1
-                : this.likeCount + 1;
+                : this.likesCnt + 1;
     }
 
     public void cancleLikeCount() {
-        this.likeCount--;
+        this.likesCnt--;
     }
 
 }
