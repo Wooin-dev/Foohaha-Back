@@ -18,6 +18,15 @@ public class LikeController {
         this.likeService = likeService;
     }
 
+    @GetMapping("/likes/quizzes/is-liked/{id}")
+    public ResponseEntity<Boolean> isLikedQuiz(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                      @PathVariable(value = "id") Long quizId) {
+
+        Boolean result = likeService.isLikedQuiz(userDetails.getUser(), quizId);
+
+        return ResponseEntity.ok().body(result);
+    }
+
     @GetMapping("/likes/quizzes/{id}")
     public ResponseEntity likeQuiz(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                    @PathVariable(value = "id") Long quizId) {
@@ -36,6 +45,16 @@ public class LikeController {
         return ResponseEntity.ok().body(new ApiResponseDto(HttpStatus.OK.value(), quizId+"번 퀴즈 좋아요를 취소했습니다."));
     }
 
+
+
+    @GetMapping("/likes/replies/is-liked/{id}")
+    public ResponseEntity<Boolean> isLikedReply(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                               @PathVariable(value = "id") Long replyId) {
+
+        Boolean result = likeService.isLikedReply(userDetails.getUser(), replyId);
+
+        return ResponseEntity.ok().body(result);
+    }
 
     @GetMapping("/likes/replies/{id}")
     public ResponseEntity likeReply(@AuthenticationPrincipal UserDetailsImpl userDetails,

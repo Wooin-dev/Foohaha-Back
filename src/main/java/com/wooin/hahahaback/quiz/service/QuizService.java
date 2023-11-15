@@ -23,10 +23,9 @@ public interface QuizService {
      * 퀴즈 한 객체 조회
      *
      * @param quizId 퀴즈 PK번호
-     * @param user
      * @return PK번호를 포함한 퀴즈 정보 리턴
      */
-    QuizResponseDto selectOneQuiz(Long quizId, User user);
+    QuizResponseDto selectOneQuiz(Long quizId);
 
     @Transactional(readOnly = true)
     Page<QuizThumbResponseDto> selectQuizPage(int page, int size, String sortBy, boolean isAsc);

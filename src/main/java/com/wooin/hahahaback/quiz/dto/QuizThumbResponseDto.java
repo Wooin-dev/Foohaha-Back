@@ -15,7 +15,7 @@ public class QuizThumbResponseDto {
     private Integer cntReplies;
 
 //    @Setter
-//    private Integer cntLikes;
+    private Integer cntLikes;
 
 
 
@@ -24,5 +24,6 @@ public class QuizThumbResponseDto {
         this.quizId = quiz.getId();
         this.question = quiz.getQuestion();
         this.author = quiz.getUser().getNickname();
+        this.cntLikes = quiz.getLikeCount();
     }
 }

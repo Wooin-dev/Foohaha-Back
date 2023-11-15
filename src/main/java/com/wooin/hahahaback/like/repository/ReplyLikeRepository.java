@@ -6,6 +6,6 @@ import com.wooin.hahahaback.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReplyLikeRepository extends JpaRepository<ReplyLike, Long> {
-    long deleteByUserAndReply(User user, Reply reply);
-    boolean existsByUserAndReply_Id(User user, Long replyId);
+    Long deleteByUserAndReply(User user, Reply reply);
+    Boolean existsByUserAndReply_Id(User user, Long replyId);
 }

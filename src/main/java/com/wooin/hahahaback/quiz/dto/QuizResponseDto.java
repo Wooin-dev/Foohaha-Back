@@ -15,6 +15,8 @@ public class QuizResponseDto {
     private String answer;
     private String description;
 
+    private Integer likesCnt;
+
     private Long authorId;
     private String author;
 
@@ -29,6 +31,9 @@ public class QuizResponseDto {
         this.hint = quiz.getHint();
         this.answer = quiz.getAnswer();
         this.description = quiz.getDescription();
+
+        this.likesCnt = quiz.getLikeCount();
+
         this.authorId = quiz.getUser().getId();
         this.author = quiz.getUser().getNickname();
 
