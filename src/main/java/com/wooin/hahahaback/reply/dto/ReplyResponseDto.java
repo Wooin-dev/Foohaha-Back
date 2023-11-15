@@ -12,13 +12,15 @@ public class ReplyResponseDto {
     private Long id;
     private String contents;
     private String author;
+    private Long authorId;
     private LocalDateTime createdAt;
 
     @Builder
-    public ReplyResponseDto(Long id, String contents, String author, LocalDateTime createdAt) {
+    public ReplyResponseDto(Long id, String contents, String author, Long authorId, LocalDateTime createdAt) {
         this.id = id;
         this.contents = contents;
         this.author = author;
+        this.authorId = authorId;
         this.createdAt = createdAt;
     }
 
@@ -27,6 +29,7 @@ public class ReplyResponseDto {
         this.id = reply.getId();
         this.contents = reply.getContents();
         this.author = reply.getUser().getNickname();
+        this.authorId = reply.getUser().getId();
         this.createdAt = reply.getCreatedAt();
     }
 }

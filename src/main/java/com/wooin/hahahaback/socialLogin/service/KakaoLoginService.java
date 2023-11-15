@@ -12,8 +12,8 @@ import com.wooin.hahahaback.user.entity.UserRoleEnum;
 import com.wooin.hahahaback.user.repository.UserRepository;
 import com.wooin.hahahaback.userdata.service.UserDataService;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,6 @@ import java.util.UUID;
 
 @Slf4j(topic = "KAKAO Login")
 @Service
-@RequiredArgsConstructor
 public class KakaoLoginService {
 
     private final PasswordEncoder passwordEncoder;
@@ -37,6 +36,19 @@ public class KakaoLoginService {
     private final UserDataService userDataService;
     private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
+
+    @Value("${front-end-base-uri}")
+    private final String FRONT_BASE_URI;
+
+    public KakaoLoginService(PasswordEncoder passwordEncoder, UserRepository userRepository, UserDataService userDataService, RestTemplate restTemplate, JwtUtil jwtUtil,
+                             @Value("${front-end-base-uri}") String FRONT_BASE_URI) {
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+        this.userDataService = userDataService;
+        this.restTemplate = restTemplate;
+        this.jwtUtil = jwtUtil;
+        this.FRONT_BASE_URI = FRONT_BASE_URI;
+    }
 
     public UserInfoResponseDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException { //String code는 카카오로부터 받은 인가 코드
         // 1. "인가 코드"로 "액세스 토큰" 요청. 액세스 토큰은 카카오 사용자 정보를 가져오기 위한 코드
@@ -71,8 +83,10 @@ public class KakaoLoginService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "c23875cfdc64342735efd50df1d7af76");
-        body.add("redirect_uri", "https://wooin-dev.github.io/foohaha/api/users/kakao/callback");
+        body.add("redirect_uri",FRONT_BASE_URI+"/api/users/kakao/callback");
         body.add("code", code);
+
+        log.info(FRONT_BASE_URI+" : front base uri");
 
         RequestEntity<MultiValueMap<String, String>> requestEntity = RequestEntity
                 .post(uri) // POST방식
