@@ -31,10 +31,15 @@ public class LikeService {
         this.replyLikeRepository = replyLikeRepository;
     }
 
+    @Transactional(readOnly = true)
+    public Boolean isLikedQuiz(User user, Long quizId) {
+        return quizLikeRepository.existsByUserAndQuiz_Id(user, quizId);
+    }
+
     @Transactional
     public void likeQuiz(User user, Long quizId) {
 
-        if (quizLikeRepository.existsByQuiz_IdAndUser(quizId, user)) {
+        if (quizLikeRepository.existsByUserAndQuiz_Id(user, quizId)) {
             throw new IllegalArgumentException("이미 좋아요를 한 상태입니다.");
         }
 
@@ -55,7 +60,7 @@ public class LikeService {
     @Transactional
     public void likeCancleQuiz(User user, Long quizId) {
 
-        if (!quizLikeRepository.existsByQuiz_IdAndUser(quizId, user)) {
+        if (!quizLikeRepository.existsByUserAndQuiz_Id(user, quizId)) {
             throw new IllegalArgumentException("아직 좋아요를 누르지 않았습니다.");
         }
 
@@ -98,12 +103,12 @@ public class LikeService {
     }
 
 
-
     private Quiz findQuizById(Long quizId) {
         Quiz foundQuiz = quizRepository.findById(quizId)
                 .orElseThrow(()-> new NotFoundException("퀴즈를 찾을 수 없습니다."));
         return foundQuiz;
     }
+
     private Reply findReplyById(Long replyId) {
         Reply foundReply = replyRepository.findById(replyId).orElseThrow(()-> new NotFoundException("댓글을 찾을 수 없습니다."));
         return foundReply;
