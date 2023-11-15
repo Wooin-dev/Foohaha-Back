@@ -48,12 +48,8 @@ public class QuizServiceImpl implements QuizService{
     }
 
     @Override
-    @Transactional
-    public QuizResponseDto selectOneQuiz(Long quizId, User user) {
-
-        if (user!=null) {
-            userDataService.findUserDataByUser(user).countShowQuiz();
-        }
+    @Transactional(readOnly = true)
+    public QuizResponseDto selectOneQuiz(Long quizId) {
         return new QuizResponseDto(findQuizById(quizId));
     }
 
