@@ -96,12 +96,6 @@ public class JwtUtil {
             log.info("refreshToken : " + refreshToken);
 
 
-            // 쿠키 생성
-//            Cookie accessTokenCookie = new Cookie(AUTHORIZATION_HEADER, tokenSpaceEncode(accessToken)); // Name-Value
-//            accessTokenCookie.setPath("/");
-//            Cookie refreshTokenCookie = new Cookie(REFRESH_TOKEN_HEADER, tokenSpaceEncode(refreshToken)); // Name-Value
-//            refreshTokenCookie.setPath("/");
-
             ResponseCookie accessTokenCookie = ResponseCookie.from(AUTHORIZATION_HEADER, tokenSpaceEncode(accessToken))
                     .httpOnly(false)
                     .path("/")
