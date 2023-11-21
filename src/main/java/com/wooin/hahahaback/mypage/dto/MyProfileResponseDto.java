@@ -13,6 +13,9 @@ public class MyProfileResponseDto {
     private String nickname;
     private LocalDateTime createdAt;
 
+    private Integer showQuizCnt;
+    private Integer showHintCnt;
+    private Integer solveQuizCnt;
     private Integer createdQuizCnt;
 
 
@@ -20,6 +23,9 @@ public class MyProfileResponseDto {
         this.email = user.getEmail();
         this.nickname = user.getNickname();
         this.createdAt = user.getCreatedAt();
+        this.showQuizCnt = userData.getShowQuizCnt();
+        this.showHintCnt = userData.getShowHintCnt();
+        this.solveQuizCnt = userData.getSolveQuizCnt();
         this.createdQuizCnt = userData.getCreateQuizCnt();
     }
 }

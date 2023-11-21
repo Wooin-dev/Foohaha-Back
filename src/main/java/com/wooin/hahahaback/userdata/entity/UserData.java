@@ -19,7 +19,6 @@ public class UserData extends Timestamped {
     private Integer showQuizCnt;
     private Integer showHintCnt;
     private Integer solveQuizCnt;
-
     private Integer createQuizCnt;
 
     @OneToOne

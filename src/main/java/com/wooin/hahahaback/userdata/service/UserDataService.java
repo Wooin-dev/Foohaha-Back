@@ -25,29 +25,25 @@ public class UserDataService {
 
     @Transactional
     public UserData countShowQuiz(User user){
-        UserData foundUserData = userDataRepository.findByUser(user).orElse(null);
-
-        if (foundUserData==null) {
-            foundUserData = createData(user);
-        }
-
+        UserData foundUserData = findUserDataByUser(user);
         foundUserData.countShowQuiz();
-
         return foundUserData;
     }
 
     @Transactional
-    public UserData showHintCnt(User user){
-        UserData foundUserData = userDataRepository.findByUser(user).orElse(null);
-
-        if (foundUserData==null) {
-            foundUserData = createData(user);
-        }
-
+    public UserData countShowHint(User user){
+        UserData foundUserData = findUserDataByUser(user);
         foundUserData.countShowHint();
-
         return foundUserData;
     }
+
+    @Transactional
+    public UserData countSolveQuiz(User user) {
+        UserData foundUserData = findUserDataByUser(user);
+        foundUserData.countSolveQuiz();
+        return foundUserData;
+    }
+
 
     @Transactional
     public UserData findUserDataByUser(User user) {
