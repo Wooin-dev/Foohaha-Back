@@ -3,6 +3,7 @@ package com.wooin.hahahaback.quiz.entity;
 import com.wooin.hahahaback.common.entity.Timestamped;
 import com.wooin.hahahaback.like.entity.QuizLike;
 import com.wooin.hahahaback.quiz.dto.QuizRequestDto;
+import com.wooin.hahahaback.quizUserData.entity.QuizUserData;
 import com.wooin.hahahaback.reply.entity.Reply;
 import com.wooin.hahahaback.user.entity.User;
 import jakarta.persistence.*;
@@ -48,6 +49,9 @@ public class Quiz extends Timestamped {
 
     @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<QuizLike> quizLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private List<QuizUserData> quizUserDatas = new ArrayList<>();
 
     public Quiz(QuizRequestDto requestDto, User user) {
 

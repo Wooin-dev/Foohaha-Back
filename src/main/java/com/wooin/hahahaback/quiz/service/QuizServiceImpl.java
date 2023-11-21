@@ -108,6 +108,13 @@ public class QuizServiceImpl implements QuizService {
         return getQuizThumbResponseDtoPage(quizzes);
     }
 
+    @Transactional(readOnly = true)
+    public Page<QuizThumbResponseDto> selectMySolvedQuizzes(User user, int page, int size, String sortBy, boolean isAsc) {
+        Pageable pageable = createPageable(page, size, sortBy, isAsc);
+        Page<Quiz> quizzes = quizRepository.findByQuizUserDatas_IsSolvedTrueAndQuizUserDatas_User(user, pageable);
+        return getQuizThumbResponseDtoPage(quizzes);
+    }
+
 
     //// Private 메소드
 
