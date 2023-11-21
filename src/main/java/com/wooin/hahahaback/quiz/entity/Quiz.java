@@ -41,10 +41,7 @@ public class Quiz extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-//
-//    @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true)
-//    private Set<QuizLike> quizLikeUsers= new HashSet<>();
-//
+
     @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<Reply> replys = new ArrayList<>();
 
