@@ -50,4 +50,17 @@ public class MyPageController {
         return ResponseEntity.ok().body(responseDto);
     }
 
+
+    @GetMapping("/my-quizzes/liked")
+    public ResponseEntity<Page<QuizThumbResponseDto>> selectMyLikedQuizzes(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                             @RequestParam("page") int page,
+                                                                             @RequestParam("size") int size,
+                                                                             @RequestParam("sortBy") String sortBy,
+                                                                             @RequestParam("isAsc") boolean isAsc) {
+
+        Page<QuizThumbResponseDto> responseDto = quizService.selectMyLikedQuizzes(userDetails.getUser(), page-1, size, sortBy, isAsc);
+
+        return ResponseEntity.ok().body(responseDto);
+    }
+
 }

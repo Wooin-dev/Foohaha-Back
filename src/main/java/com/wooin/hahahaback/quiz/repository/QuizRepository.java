@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
+    Page<Quiz> findByQuizLikes_User(User user, Pageable pageable);
     long countByReplys(Reply replys);
     List<Quiz> findByUser(User user);
 
