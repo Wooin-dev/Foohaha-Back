@@ -20,16 +20,16 @@ https://lucid.app/lucidchart/ec2b6080-9697-4771-9254-20e8d4458497/edit?viewport_
 - 배포
 - 마이페이지 기능 
   - 문제 풀이 통계 구성 (내가 풀은 문제, 못 풀은 문제, 내 점수 등)
-  - 🚩 내가 만든 퀴즈 리스트
-  - 나의 퀴즈 스탯 통계
-- RefreshToken 전략 Rotation 등 고안
+  - 내가 만든 퀴즈 리스트
 
 
 
 ## 🛴 Basic feature
-- Github Actions CI/CD 구성
+- 🚩 Github Actions CI/CD 구성
+- RefreshToken 전략 Rotation 등 고안
 - 정답 리스트로 확장 (예비 정답)
 - 퀴즈 백데이터 작업 (열람된 횟수, 힌트를 본 횟수, 정답률, 퀴즈 평가)
+- 나의 퀴즈 스탯 통계
 - 퀴즈 신고 기능 및 자동 블락 처리
 - 조회수, 힌트열람, 정답률,
 - 퀴즈 정답확인 후 평가 기능 추가

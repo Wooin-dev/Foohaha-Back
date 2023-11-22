@@ -2,9 +2,8 @@ package com.wooin.hahahaback.mypage.service;
 
 import com.wooin.hahahaback.common.exception.NotFoundException;
 import com.wooin.hahahaback.mypage.dto.EditMyProfileRequestDto;
-import com.wooin.hahahaback.mypage.dto.MyOverviewResponseDto;
 import com.wooin.hahahaback.mypage.dto.MyProfileResponseDto;
-import com.wooin.hahahaback.quiz.entity.Quiz;
+import com.wooin.hahahaback.quiz.repository.QuizRepository;
 import com.wooin.hahahaback.quiz.service.QuizServiceImpl;
 import com.wooin.hahahaback.user.entity.User;
 import com.wooin.hahahaback.user.repository.UserRepository;
@@ -16,8 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class MyPageService {
@@ -26,16 +23,7 @@ public class MyPageService {
     private final QuizServiceImpl quizService;
     private final UserService userService;
     private final UserRepository userRepository;
-
-    @Transactional(readOnly = true)
-    public MyOverviewResponseDto getMyOverview(User user) {
-
-        UserData foundUserData = userDataService.findUserDataByUser(user);
-
-        List<Quiz> foundQuizzes = quizService.selectMyQuizzes(user);
-
-        return new MyOverviewResponseDto(foundUserData, foundQuizzes);
-    }
+    private final QuizRepository quizRepository;
 
     @Transactional(readOnly = true)
     public MyProfileResponseDto getMyProfile(User user) {
@@ -53,4 +41,29 @@ public class MyPageService {
                 .editUser(requestDto);
 
     }
+//
+//
+//    @Transactional(readOnly = true)
+//    public Page<QuizThumbResponseDto> selectMyQuizzes(User user, int page, int size, String sortBy, boolean isAsc) {
+//
+//        //페이징 처리 // refactor 유틸클래스로 중복 줄일 수 있을 듯
+//        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+//        Sort sort = Sort.by(direction, sortBy);
+//        Pageable pageable = PageRequest.of(page, size, sort);
+//
+//        Page<Quiz> quizzes = quizRepository.findAllByUser(user, pageable);
+//        return quizzes
+//                .map(quiz -> {
+//                    Integer countReplies = countReplies(quiz);
+//                    var dto = new QuizThumbResponseDto(quiz);
+//                    dto.setCntReplies(countReplies);
+//                    return dto;
+//                });
+//
+//
+//
+//        return
+//    }
+//
+
 }

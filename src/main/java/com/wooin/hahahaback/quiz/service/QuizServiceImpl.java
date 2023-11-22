@@ -20,11 +20,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
-public class QuizServiceImpl implements QuizService{
+public class QuizServiceImpl implements QuizService {
 
     private final QuizRepository quizRepository;
     private final UserRepository userRepository;
@@ -58,20 +56,10 @@ public class QuizServiceImpl implements QuizService{
     @Transactional(readOnly = true)
     public Page<QuizThumbResponseDto> selectQuizPage(int page, int size, String sortBy, boolean isAsc) {
 
-        //페이징 처리
-        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, sortBy);
-        Pageable pageable = PageRequest.of(page, size, sort);
-
-
+        Pageable pageable = createPageable(page, size, sortBy, isAsc);
         Page<Quiz> quizzes = quizRepository.findAll(pageable);
-        return quizzes
-                .map(quiz -> {
-                    Integer countReplies = countReplies(quiz);
-                    var dto = new QuizThumbResponseDto(quiz);
-                    dto.setCntReplies(countReplies);
-                    return dto;
-                });
+
+        return getQuizThumbResponseDtoPage(quizzes);
     }
 
     public Integer countReplies(Quiz quiz) {
@@ -90,7 +78,6 @@ public class QuizServiceImpl implements QuizService{
     }
 
 
-
     @Override
     @Transactional
     public void deleteQuiz(Long quizId, User user) {
@@ -101,19 +88,46 @@ public class QuizServiceImpl implements QuizService{
         userDataService.findUserDataByUser(user).discountCreateQuiz();
 
         quizRepository.deleteById(quizId);
-
-
     }
 
 
     ////////////
     ///MyPage///
     ////////////
-
-    public List<Quiz> selectMyQuizzes(User user) {
-        return quizRepository.findByUser(user);
+    @Transactional(readOnly = true)
+    public Page<QuizThumbResponseDto> selectMyCreatedQuizzes(User user, int page, int size, String sortBy, boolean isAsc) {
+        Pageable pageable = createPageable(page, size, sortBy, isAsc);
+        Page<Quiz> quizzes = quizRepository.findAllByUser(user, pageable);
+        return getQuizThumbResponseDtoPage(quizzes);
     }
 
+    @Transactional(readOnly = true)
+    public Page<QuizThumbResponseDto> selectMyLikedQuizzes(User user, int page, int size, String sortBy, boolean isAsc) {
+        Pageable pageable = createPageable(page, size, sortBy, isAsc);
+        Page<Quiz> quizzes = quizRepository.findAllByQuizLikes_User(user, pageable);
+        return getQuizThumbResponseDtoPage(quizzes);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<QuizThumbResponseDto> selectMySolvedQuizzes(User user, int page, int size, String sortBy, boolean isAsc) {
+        Pageable pageable = createPageable(page, size, sortBy, isAsc);
+        Page<Quiz> quizzes = quizRepository.findByQuizUserDatas_IsSolvedTrueAndQuizUserDatas_User(user, pageable);
+        return getQuizThumbResponseDtoPage(quizzes);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<QuizThumbResponseDto> selectMyTryQuizzes(User user, int page, int size, String sortBy, boolean isAsc) {
+        Pageable pageable = createPageable(page, size, sortBy, isAsc);
+        Page<Quiz> quizzes = quizRepository.findByQuizUserDatas_UserAndQuizUserDatasNotEmptyAndQuizUserDatas_IsSolvedFalse(user, pageable);
+        return getQuizThumbResponseDtoPage(quizzes);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<QuizThumbResponseDto> selectMyCheckedHintQuizzes(User user, int page, int size, String sortBy, boolean isAsc) {
+        Pageable pageable = createPageable(page, size, sortBy, isAsc);
+        Page<Quiz> quizzes = quizRepository.findByQuizUserDatas_UserAndQuizUserDatas_IsShowHintTrueAndQuizUserDatas_IsSolvedFalse(user, pageable);
+        return getQuizThumbResponseDtoPage(quizzes);
+    }
 
     //// Private 메소드
 
@@ -121,6 +135,7 @@ public class QuizServiceImpl implements QuizService{
         return quizRepository.findById(quizId).orElseThrow(()
                 -> new NotFoundException(quizId + "번의 퀴즈를 찾을 수 없습니다."));
     }
+
     private User findUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(()
                 -> new NotFoundException(userId + " : 유저를 찾을 수 없습니다."));
@@ -130,5 +145,23 @@ public class QuizServiceImpl implements QuizService{
         if (!user.getId().equals(foundQuiz.getUser().getId())) {
             throw new NoAuthorizedException("권한이 없습니다.");
         }
+    }
+
+    //Pagination
+    private Pageable createPageable(int page, int size, String sortBy, boolean isAsc) {
+
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+
+        return PageRequest.of(page, size, sort);
+    }
+
+    private Page<QuizThumbResponseDto> getQuizThumbResponseDtoPage(Page<Quiz> quizzes) {
+        return quizzes.map(quiz -> {
+            Integer countReplies = countReplies(quiz);
+            var dto = new QuizThumbResponseDto(quiz);
+            dto.setCntReplies(countReplies);
+            return dto;
+        });
     }
 }
