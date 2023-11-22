@@ -38,18 +38,7 @@ public class MyPageController {
         return ResponseEntity.ok().body(new ApiResponseDto(HttpStatus.CREATED.value(), "수정 완료."));
     }
 
-    @GetMapping("/my-quizzes/created")
-    public ResponseEntity<Page<QuizThumbResponseDto>> selectMyCreatedQuizzes(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                                           @RequestParam("page") int page,
-                                                                           @RequestParam("size") int size,
-                                                                           @RequestParam("sortBy") String sortBy,
-                                                                           @RequestParam("isAsc") boolean isAsc) {
-
-        Page<QuizThumbResponseDto> responseDto = quizService.selectMyCreatedQuizzes(userDetails.getUser(), page-1, size, sortBy, isAsc);
-
-        return ResponseEntity.ok().body(responseDto);
-    }
-
+    //Get My Quizzes
 
     @GetMapping("/my-quizzes/liked")
     public ResponseEntity<Page<QuizThumbResponseDto>> selectMyLikedQuizzes(@AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -63,14 +52,50 @@ public class MyPageController {
         return ResponseEntity.ok().body(responseDto);
     }
 
+    @GetMapping("/my-quizzes/try")
+    public ResponseEntity<Page<QuizThumbResponseDto>> selectMyTryQuizzes(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                         @RequestParam("page") int page,
+                                                                         @RequestParam("size") int size,
+                                                                         @RequestParam("sortBy") String sortBy,
+                                                                         @RequestParam("isAsc") boolean isAsc) {
+
+        Page<QuizThumbResponseDto> responseDto = quizService.selectMyTryQuizzes(userDetails.getUser(), page-1, size, sortBy, isAsc);
+
+        return ResponseEntity.ok().body(responseDto);
+    }
+
+    @GetMapping("/my-quizzes/checked-hint")
+    public ResponseEntity<Page<QuizThumbResponseDto>> selectMyCheckHintQuizzes(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                               @RequestParam("page") int page,
+                                                                               @RequestParam("size") int size,
+                                                                               @RequestParam("sortBy") String sortBy,
+                                                                               @RequestParam("isAsc") boolean isAsc) {
+
+        Page<QuizThumbResponseDto> responseDto = quizService.selectMyCheckedHintQuizzes(userDetails.getUser(), page-1, size, sortBy, isAsc);
+
+        return ResponseEntity.ok().body(responseDto);
+    }
+
     @GetMapping("/my-quizzes/solved")
     public ResponseEntity<Page<QuizThumbResponseDto>> selectMySolvedQuizzes(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                                           @RequestParam("page") int page,
-                                                                           @RequestParam("size") int size,
-                                                                           @RequestParam("sortBy") String sortBy,
-                                                                           @RequestParam("isAsc") boolean isAsc) {
+                                                                            @RequestParam("page") int page,
+                                                                            @RequestParam("size") int size,
+                                                                            @RequestParam("sortBy") String sortBy,
+                                                                            @RequestParam("isAsc") boolean isAsc) {
 
         Page<QuizThumbResponseDto> responseDto = quizService.selectMySolvedQuizzes(userDetails.getUser(), page-1, size, sortBy, isAsc);
+
+        return ResponseEntity.ok().body(responseDto);
+    }
+
+    @GetMapping("/my-quizzes/created")
+    public ResponseEntity<Page<QuizThumbResponseDto>> selectMyCreatedQuizzes(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                             @RequestParam("page") int page,
+                                                                             @RequestParam("size") int size,
+                                                                             @RequestParam("sortBy") String sortBy,
+                                                                             @RequestParam("isAsc") boolean isAsc) {
+
+        Page<QuizThumbResponseDto> responseDto = quizService.selectMyCreatedQuizzes(userDetails.getUser(), page-1, size, sortBy, isAsc);
 
         return ResponseEntity.ok().body(responseDto);
     }
