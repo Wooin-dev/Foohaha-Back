@@ -14,6 +14,8 @@ env:
   S3_BUCKET_NAME: foohaha-github-actions-s3-bucket
   CODE_DEPLOY_APPLICATION_NAME: foohaha-codedeploy-app
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: foohaha-codedeploy-deployment-group
+  PROJECT_NAME: Foohaha-Back
+  RESOURCE_PATH: /home/runner/work/$PROJECT_NAME/$PROJECT_NAME/src/main/resources
 
 permissions:
   contents: read
@@ -25,33 +27,41 @@ jobs:
     environment: production
 
     steps:
-    # (1) 기본 체크아웃
+    # (0) 기본 체크아웃
     - name: Checkout
       uses: actions/checkout@v3
 
-    # (2) JDK 17 세팅
+    # (1) JDK 17 세팅
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
         java-version: '17'
-    # application-*.properties 생성
+
+    # (2-1) application-*.properties 생성
     - name: properties 파일 생성
       run: | 
-        cd ./src/main
-        mkdir resources
-        cd resources
+        cd ./src/main/resources
         touch ./application.properties
         echo "${{secrets.APPLICATION_PROPERTIES}}" > ./application.properties
         touch ./application-redis.properties
         echo "${{secrets.APPLICATION_REDIS_PROPERTIES}}" > ./application-redis.properties
       shell: bash
         
+    # (2-2) keystore-p12.tar.gpg 파일 복호화
+    - name: keystore 파일 복호화
+      run: gpg --quiet --batch --yes --always-trust --decrypt --passphrase=${{ secrets.KEYSTORE_DECRYPT_KEY }} --output $RESOURCE_PATH/keystore-p12.tar $RESOURCE_PATH/application.tar.gpg
 
+    # (2-3) keystore-p12.tar 압축 해제
+    - name: Unzip application yml
+      run: tar xvf $RESOURCE_PATH/keystore-p12.tar
+      shell: bash
+
+    # (3-0) Gradle 실행 권한 부여
     - name: gradlew에 실행 권한 부여
       run: chmod +x ./gradlew
 
-    # (3) Gradle build
+    # (3-1) Gradle build
     - name: Build with Gradle
       run: ./gradlew build
 
