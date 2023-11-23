@@ -15,7 +15,7 @@ env:
   CODE_DEPLOY_APPLICATION_NAME: foohaha-codedeploy-app
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: foohaha-codedeploy-deployment-group
   PROJECT_NAME: Foohaha-Back
-  RESOURCE_PATH: /home/runner/work/$PROJECT_NAME/$PROJECT_NAME/src/main/resources
+  RESOURCE_PATH: /home/runner/work/${PROJECT_NAME}/${PROJECT_NAME}/src/main/resources
 
 permissions:
   contents: read
@@ -50,7 +50,7 @@ jobs:
         
     # (2-2) keystore-p12.tar.gpg 파일 복호화
     - name: keystore 파일 복호화
-      run: gpg --quiet --batch --yes --always-trust --decrypt --passphrase=${{ secrets.KEYSTORE_DECRYPT_KEY }} --output $RESOURCE_PATH/keystore-p12.tar $RESOURCE_PATH/application.tar.gpg
+      run: gpg --quiet --batch --yes --always-trust --decrypt --passphrase=${{ secrets.KEYSTORE_DECRYPT_KEY }} --output ${RESOURCE_PATH}/keystore-p12.tar ${RESOURCE_PATH}/application.tar.gpg
 
     # (2-3) keystore-p12.tar 압축 해제
     - name: Unzip application yml
