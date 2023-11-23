@@ -15,7 +15,7 @@ env:
   CODE_DEPLOY_APPLICATION_NAME: foohaha-codedeploy-app
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: foohaha-codedeploy-deployment-group
   PROJECT_NAME: Foohaha-Back
-  RESOURCE_PATH: /home/runner/work/${{env.PROJECT_NAME}}/${{env.PROJECT_NAME}}/src/main/resources
+  RESOURCE_PATH: /home/runner/work/Foohaha-Back/Foohaha-Back/src/main/resources
 
 permissions:
   contents: read
