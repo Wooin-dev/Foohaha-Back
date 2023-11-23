@@ -53,7 +53,7 @@ jobs:
     - name: keystore 파일 복호화
       run: gpg --quiet --batch --yes --always-trust --decrypt --passphrase=${{ secrets.KEYSTORE_DECRYPT_KEY }} --output ${{env.RESOURCE_PATH}}/keystore-p12.tar ${{env.RESOURCE_PATH}}/keystore-p12.tar.gpg
 
-    # (2-3) keystore-p12.tar 압축 해제
+    # (2-3) keystore-p12.tar 압축 해제 +resources폴더로 파일이동
     - name: Unzip application yml
       run: | 
         tar xvf ${{env.RESOURCE_PATH}}/keystore-p12.tar
