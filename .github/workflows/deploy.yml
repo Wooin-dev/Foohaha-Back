@@ -57,8 +57,7 @@ jobs:
     - name: Unzip application yml
       run: | 
         tar xvf ${{env.RESOURCE_PATH}}/keystore-p12.tar
-        cd ${{env.ROOT_PATH}}
-        mv keystore-p12.tar ${{env.RESOURCE_PATH}}
+        mv ${{env.ROOT_PATH}}/keystore-p12.tar ${{env.RESOURCE_PATH}}
 
       shell: bash
 
