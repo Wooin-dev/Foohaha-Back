@@ -15,6 +15,7 @@ env:
   CODE_DEPLOY_APPLICATION_NAME: foohaha-codedeploy-app
   CODE_DEPLOY_DEPLOYMENT_GROUP_NAME: foohaha-codedeploy-deployment-group
   PROJECT_NAME: Foohaha-Back
+  ROOT_PATH: /home/runner/work/Foohaha-Back/Foohaha-Back
   RESOURCE_PATH: /home/runner/work/Foohaha-Back/Foohaha-Back/src/main/resources
 
 permissions:
@@ -54,7 +55,11 @@ jobs:
 
     # (2-3) keystore-p12.tar 압축 해제
     - name: Unzip application yml
-      run: tar xvf ${{env.RESOURCE_PATH}}/keystore-p12.tar
+      run: | 
+        tar xvf ${{env.RESOURCE_PATH}}/keystore-p12.tar
+        cd ${{env.ROOT_PATH}}
+        mv keystore-p12.tar ${{env.RESOURCE_PATH}}
+
       shell: bash
 
     # (3-0) Gradle 실행 권한 부여
