@@ -35,6 +35,16 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: '17'
+    # application-*.properties 생성
+    - name: properties 파일 생성
+      run: | 
+        mkdir src/main/resources
+        touch ./application.properties
+        echo "${{secrets.APPLICATION_PROPERTIES}}" > ./application.properties
+        touch ./application-redis.properties
+        echo "${{secrets.APPLICATION_REDIS_PROPERTIES}}" > ./application-redis.properties
+      shell: bash
+        
 
     - name: gradlew에 실행 권한 부여
       run: chmod +x ./gradlew
