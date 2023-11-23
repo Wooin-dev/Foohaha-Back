@@ -54,7 +54,7 @@ jobs:
 
     # (2-3) keystore-p12.tar 압축 해제
     - name: Unzip application yml
-      run: tar xvf $RESOURCE_PATH/keystore-p12.tar
+      run: tar xvf ${{env.RESOURCE_PATH}}/keystore-p12.tar
       shell: bash
 
     # (3-0) Gradle 실행 권한 부여
