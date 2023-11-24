@@ -20,22 +20,26 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.security.Principal;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = UserController.class,
-            excludeFilters = { //Security 환경에서의 WebSecurity 필터를 제외.
+@WebMvcTest(controllers = UserController.class
+            ,excludeFilters = { //Security 환경에서의 WebSecurity 필터를 제외.
                 @ComponentScan.Filter(
                         type = FilterType.ASSIGNABLE_TYPE,
                         classes= WebSecurityConfig.class
-                )})
+                )}
+)
 @Slf4j(topic = "UserControllerTest")
 class UserControllerTest {
 
@@ -54,6 +58,7 @@ class UserControllerTest {
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(springSecurity(new MockSpringSecurityFilter())) //만들어둔 Mock필터를 여기서 추가해준다
+                .addFilter(new CharacterEncodingFilter("UTF-8", true)) // 한글깨짐 현상 방지
                 .build();
     }
 
@@ -90,14 +95,32 @@ class UserControllerTest {
 
         String signupInfo = objectMapper.writeValueAsString(signupRequestDto);
 
-        ////WHEN - THEN
-        mvc.perform(post("/api/users/signup")
-                        .content(signupInfo)
+        // A //
+//        ////WHEN - THEN
+//        String resultBody = objectMapper.writeValueAsString(new ApiResponseDto(201,"회원가입 완료."));
+//
+//        mvc.perform(post("/api/users/signup")
+//                        .content(signupInfo)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .accept(MediaType.APPLICATION_JSON)
+//                )
+//                .andExpect(status().isCreated())
+//                .andExpect(content().string(resultBody))
+//                .andDo(print());
+
+        // B //
+        // when
+        ResultActions resultActions = mvc.perform(
+                MockMvcRequestBuilders.post("/api/users/signup")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(status().isCreated())
+                        .content(signupInfo));
+
+        // then
+        resultActions.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.statusCode").value("201"))
+                .andExpect(jsonPath("$.statusMessage").value("회원가입 완료."))
                 .andDo(print());
+
     }
 
 
