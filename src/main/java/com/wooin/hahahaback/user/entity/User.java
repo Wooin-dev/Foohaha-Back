@@ -3,14 +3,13 @@ package com.wooin.hahahaback.user.entity;
 import com.wooin.hahahaback.common.entity.Timestamped;
 import com.wooin.hahahaback.mypage.dto.EditMyProfileRequestDto;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name = "users")
 public class User extends Timestamped {
 

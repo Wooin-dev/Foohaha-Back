@@ -3,9 +3,11 @@ package com.wooin.hahahaback.user.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class SignupRequestDto {
 
     @Size(min = 4, max = 10) //문자열이라 Min Max대신 Size 시도
