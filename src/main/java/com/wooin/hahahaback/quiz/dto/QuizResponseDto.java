@@ -2,11 +2,15 @@ package com.wooin.hahahaback.quiz.dto;
 
 import com.wooin.hahahaback.quiz.entity.Quiz;
 import com.wooin.hahahaback.reply.dto.ReplyResponseDto;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuizResponseDto {
 
     private Long quizId;
@@ -14,6 +18,8 @@ public class QuizResponseDto {
     private String hint;
     private String answer;
     private String description;
+
+    private LocalDateTime createdAt;
 
     private Integer likesCnt;
 
@@ -31,6 +37,7 @@ public class QuizResponseDto {
         this.hint = quiz.getHint();
         this.answer = quiz.getAnswer();
         this.description = quiz.getDescription();
+        this.createdAt = quiz.getCreatedAt();
 
         this.likesCnt = quiz.getLikeCount();
 

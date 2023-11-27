@@ -53,6 +53,9 @@ public class Quiz extends Timestamped {
     @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<QuizUserData> quizUserDatas = new ArrayList<>();
 
+
+
+    ////생성자
     public Quiz(QuizRequestDto requestDto, User user) {
 
         this.question = requestDto.getQuestion();
