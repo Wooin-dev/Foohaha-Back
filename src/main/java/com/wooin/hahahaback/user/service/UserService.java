@@ -6,7 +6,6 @@ import com.wooin.hahahaback.user.entity.User;
 import com.wooin.hahahaback.user.entity.UserRoleEnum;
 import com.wooin.hahahaback.user.repository.UserRepository;
 import com.wooin.hahahaback.userdata.service.UserDataService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +26,7 @@ public class UserService {
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
 
-    public void signup(SignupRequestDto requestDto, HttpServletResponse res) {
+    public void signup(SignupRequestDto requestDto) {
         //Dto -> 변수에 담기
         String username = requestDto.getUsername();
         String password = passwordEncoder.encode(requestDto.getPassword()); // 암호화해서 할당
@@ -36,8 +35,6 @@ public class UserService {
         //회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);
         if (checkUsername.isPresent()) {
-            res.setStatus(400); //why 결국엔 redirect 되서 302로 덮어씌어짐.
-            res.addHeader("message", "existed username");
             throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
         }
 
