@@ -11,8 +11,8 @@ import com.wooin.hahahaback.user.service.UserService;
 import com.wooin.hahahaback.userdata.entity.UserData;
 import com.wooin.hahahaback.userdata.service.UserDataService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -33,13 +33,13 @@ public class MyPageService {
     }
 
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void editMyProfile(User user, EditMyProfileRequestDto requestDto) {
+    @Transactional
+    @CachePut(value = "User", key = "#user.getUsername()")
+    public User editMyProfile(User user, EditMyProfileRequestDto requestDto) {
 
-        userRepository.findById(user.getId()).orElseThrow(()
+        return userRepository.findById(user.getId()).orElseThrow(()
                 -> new NotFoundException("사용자를 찾을 수 없습니다."))
                 .editUser(requestDto);
-
     }
 //
 //

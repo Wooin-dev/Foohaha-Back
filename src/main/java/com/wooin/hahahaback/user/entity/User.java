@@ -62,8 +62,9 @@ public class User extends Timestamped {
         return this;
     }
 
-    public void editUser(EditMyProfileRequestDto requestDto) {
+    public User editUser(EditMyProfileRequestDto requestDto) {
         this.nickname = requestDto.getNickname();
+        return this;
     }
 
 
