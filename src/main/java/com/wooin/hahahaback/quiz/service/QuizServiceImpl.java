@@ -13,6 +13,7 @@ import com.wooin.hahahaback.user.repository.UserRepository;
 import com.wooin.hahahaback.userdata.repository.UserDataRepository;
 import com.wooin.hahahaback.userdata.service.UserDataService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,6 +48,7 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "Quiz", key = "#quizId", unless = "#result==null")
     public QuizResponseDto selectOneQuiz(Long quizId) {
         return new QuizResponseDto(findQuizById(quizId));
     }
@@ -130,8 +132,8 @@ public class QuizServiceImpl implements QuizService {
     }
 
     //// Private 메소드
-
-    private Quiz findQuizById(Long quizId) {
+    @Transactional(readOnly = true)
+    public Quiz findQuizById(Long quizId) {
         return quizRepository.findById(quizId).orElseThrow(()
                 -> new NotFoundException(quizId + "번의 퀴즈를 찾을 수 없습니다."));
     }
