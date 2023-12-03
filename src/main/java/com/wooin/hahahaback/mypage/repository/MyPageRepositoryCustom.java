@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MyPageRepositoryCustom {
     Page<Quiz> selectMyCheckedHintQuizzes(User user, Pageable pageable);
+    Page<Quiz> selectMyTryQuizzes(User user, Pageable pageable);
+    Page<Quiz> selectMySolvedQuizzes(User user, Pageable pageable);
 }

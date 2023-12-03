@@ -51,4 +51,68 @@ public class MyPageRepositoryCustomImpl implements MyPageRepositoryCustom {
         assert count != null;
         return new PageImpl<>(results, pageable, count);
     }
+
+    @Override
+    public Page<Quiz> selectMyTryQuizzes(User user, Pageable pageable) {
+
+        QQuiz quiz = QQuiz.quiz;
+        QQuizUserData quizUserData = QQuizUserData.quizUserData;
+
+        List<Quiz> results = jpaQueryFactory
+                .select(quiz) // refactor select() 안에 Projection 객체를 넣어줄 수 있다
+                .from(quiz)
+                .join(quizUserData).on(quizUserData.quiz.eq(quiz))
+                .where(quizUserData.user.eq(user)
+                        .and(quizUserData.isNotNull())
+                        .and(quizUserData.isSolved.isFalse())
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+
+        Long count = jpaQueryFactory
+                .select(quiz.count())
+                .from(quiz)
+                .join(quizUserData).on(quizUserData.quiz.eq(quiz))
+                .where(quizUserData.user.eq(user)
+                        .and(quizUserData.isNotNull())
+                        .and(quizUserData.isSolved.isFalse())
+                )
+                .fetchOne();
+
+        assert count != null;
+        return new PageImpl<>(results, pageable, count);
+    }
+
+    @Override
+    public Page<Quiz> selectMySolvedQuizzes(User user, Pageable pageable) {
+
+        QQuiz quiz = QQuiz.quiz;
+        QQuizUserData quizUserData = QQuizUserData.quizUserData;
+
+        List<Quiz> results = jpaQueryFactory
+                .select(quiz) // refactor select() 안에 Projection 객체를 넣어줄 수 있다
+                .from(quiz)
+                .join(quizUserData).on(quizUserData.quiz.eq(quiz))
+                .where(quizUserData.user.eq(user)
+                        .and(quizUserData.isSolved.isTrue())
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+
+        Long count = jpaQueryFactory
+                .select(quiz.count())
+                .from(quiz)
+                .join(quizUserData).on(quizUserData.quiz.eq(quiz))
+                .where(quizUserData.user.eq(user)
+                        .and(quizUserData.isSolved.isTrue())
+                )
+                .fetchOne();
+
+        assert count != null;
+        return new PageImpl<>(results, pageable, count);
+    }
 }

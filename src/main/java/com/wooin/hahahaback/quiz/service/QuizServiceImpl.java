@@ -113,26 +113,26 @@ public class QuizServiceImpl implements QuizService {
     @Transactional(readOnly = true)
     public Page<QuizThumbResponseDto> selectMySolvedQuizzes(User user, int page, int size, String sortBy, boolean isAsc) {
         Pageable pageable = createPageable(page, size, sortBy, isAsc);
-        Page<Quiz> quizzes = quizRepository.findByQuizUserDatas_IsSolvedTrueAndQuizUserDatas_User(user, pageable);
+//        Page<Quiz> quizzes = quizRepository.findByQuizUserDatas_IsSolvedTrueAndQuizUserDatas_User(user, pageable);
+        Page<Quiz> quizzes = quizRepository.selectMySolvedQuizzes(user, pageable);
         return getQuizThumbResponseDtoPage(quizzes);
     }
 
     @Transactional(readOnly = true)
     public Page<QuizThumbResponseDto> selectMyTryQuizzes(User user, int page, int size, String sortBy, boolean isAsc) {
         Pageable pageable = createPageable(page, size, sortBy, isAsc);
-        Page<Quiz> quizzes = quizRepository.findByQuizUserDatas_UserAndQuizUserDatasNotEmptyAndQuizUserDatas_IsSolvedFalse(user, pageable);
+        Page<Quiz> quizzes = quizRepository.selectMyTryQuizzes(user, pageable);
         return getQuizThumbResponseDtoPage(quizzes);
     }
 
     @Transactional(readOnly = true)
     public Page<QuizThumbResponseDto> selectMyCheckedHintQuizzes(User user, int page, int size, String sortBy, boolean isAsc) {
         Pageable pageable = createPageable(page, size, sortBy, isAsc);
-//        Page<Quiz> quizzes = quizRepository.findByQuizUserDatas_UserAndQuizUserDatas_IsShowHintTrueAndQuizUserDatas_IsSolvedFalse(user, pageable);
         Page<Quiz> quizzes = quizRepository.selectMyCheckedHintQuizzes(user, pageable);
         return getQuizThumbResponseDtoPage(quizzes);
     }
 
-    //// Private 메소드
+
     @Transactional(readOnly = true)
     public Quiz findQuizById(Long quizId) {
         return quizRepository.findById(quizId).orElseThrow(()
