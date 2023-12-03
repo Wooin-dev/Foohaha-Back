@@ -127,7 +127,8 @@ public class QuizServiceImpl implements QuizService {
     @Transactional(readOnly = true)
     public Page<QuizThumbResponseDto> selectMyCheckedHintQuizzes(User user, int page, int size, String sortBy, boolean isAsc) {
         Pageable pageable = createPageable(page, size, sortBy, isAsc);
-        Page<Quiz> quizzes = quizRepository.findByQuizUserDatas_UserAndQuizUserDatas_IsShowHintTrueAndQuizUserDatas_IsSolvedFalse(user, pageable);
+//        Page<Quiz> quizzes = quizRepository.findByQuizUserDatas_UserAndQuizUserDatas_IsShowHintTrueAndQuizUserDatas_IsSolvedFalse(user, pageable);
+        Page<Quiz> quizzes = quizRepository.selectMyCheckedHintQuizzes(user, pageable);
         return getQuizThumbResponseDtoPage(quizzes);
     }
 
