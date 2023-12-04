@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface QuizRepository extends JpaRepository<Quiz, Long>, MyPageRepositoryCustom {
+public interface QuizRepository extends JpaRepository<Quiz, Long>, MyPageRepositoryCustom, QuizRepositoryCustom {
     Page<Quiz> findAllByQuizLikes_User(User user, Pageable pageable);
     Page<Quiz> findAllByUser(User user, Pageable pageable);
 }
