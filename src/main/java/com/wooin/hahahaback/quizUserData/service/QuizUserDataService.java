@@ -28,7 +28,7 @@ public class QuizUserDataService {
     @Transactional
     public QuizUserDataResponseDto getQuizUserData(User user, Long quizId) {
 
-        QuizUserData quizUserData = null;
+        QuizUserData quizUserData;
         //데이터가 없으면 생성, 있으면 조회
         if (!quizUserDataRepository.existsByUserAndQuiz_Id(user, quizId)) {
             Quiz foundQuiz = findQuizById(quizId);

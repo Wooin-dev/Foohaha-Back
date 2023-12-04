@@ -27,6 +27,7 @@ repositories {
 }
 
 dependencies {
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 //    testImplementation 'org.projectlombok:lombok:1.18.26'
@@ -49,6 +50,12 @@ dependencies {
     // MySQL
     implementation 'mysql:mysql-connector-java:8.0.33'
     runtimeOnly 'com.mysql:mysql-connector-j:8.0.32'
+
+    //QueryDsl
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.0.4'
@@ -80,4 +87,23 @@ jacocoTestReport {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+
+// QueryDsl 설정부
+def generated = 'src/main/generated'
+
+// querydsl Qclass 파일생성 위치 지정
+tasks.withType(JavaCompile) {
+    options.getGeneratedSourceOutputDirectory().set(file(generated))
+}
+
+// java source set에 queryDsl QClass 위치 추가
+sourceSets {
+    main.java.srcDirs += [ generated ]
+}
+
+// gradle clean 시, QClass 디렉토리 삭제
+clean {
+    delete file(generated)
 }

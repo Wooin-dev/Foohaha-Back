@@ -14,7 +14,7 @@ public class QuizUserDataResponseDto {
 
     public QuizUserDataResponseDto(QuizUserData savedQuizUserData) {
         this.id = savedQuizUserData.getId();
-        this.isShowHint = savedQuizUserData.getIsShowHint();
+        this.isShowHint = savedQuizUserData.getIsCheckedHint();
         this.isSolved = savedQuizUserData.getIsSolved();
     }
 }

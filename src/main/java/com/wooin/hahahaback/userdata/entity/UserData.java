@@ -21,7 +21,7 @@ public class UserData extends Timestamped {
     private Integer solveQuizCnt;
     private Integer createQuizCnt;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

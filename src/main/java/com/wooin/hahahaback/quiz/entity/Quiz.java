@@ -7,9 +7,7 @@ import com.wooin.hahahaback.quizUserData.entity.QuizUserData;
 import com.wooin.hahahaback.reply.entity.Reply;
 import com.wooin.hahahaback.user.entity.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,22 +38,36 @@ public class Quiz extends Timestamped {
 
     ////연관관계
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Reply> replys = new ArrayList<>();
 
-    @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<QuizLike> quizLikes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToMany(mappedBy = "quiz", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<QuizUserData> quizUserDatas = new ArrayList<>();
 
 
-
     ////생성자
+
+    @Builder
+    public Quiz(String question, String hint, String answer, String description, User user, List<Reply> replys, List<QuizLike> quizLikes, List<QuizUserData> quizUserDatas) {
+        this.question = question;
+        this.hint = hint;
+        this.answer = answer;
+        this.description = description;
+        this.user = user;
+        this.replys = replys;
+        this.quizLikes = quizLikes;
+        this.quizUserDatas = quizUserDatas;
+
+        this.likeCount = 0;
+    }
+
     public Quiz(QuizRequestDto requestDto, User user) {
 
         this.question = requestDto.getQuestion();
@@ -76,7 +88,7 @@ public class Quiz extends Timestamped {
     public void hitLikeCount() {
         //todo 이전 버전의 객체와 맞추기 위한 코드도 생각해볼 필요가 있다.
         if (this.likeCount == null) {
-            this.likeCount=0;
+            this.likeCount = 0;
         }
         this.likeCount++;
     }

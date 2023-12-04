@@ -43,3 +43,4 @@ keystore.p12
 application-local.properties
 local-keystore.p12
 keystore-p12.tar
+generated/
