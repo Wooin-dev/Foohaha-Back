@@ -24,7 +24,7 @@ public class QuizController {
 
     @PostMapping("/quizzes")
     public ResponseEntity<ApiResponseDto> createQuiz(
-          @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody QuizRequestDto requestDto) {
 
         QuizResponseDto responseDto = quizService.createQuiz(userDetails.getUser(), requestDto);
@@ -41,7 +41,7 @@ public class QuizController {
             @RequestParam("isAsc") boolean isAsc
     ) {
 
-        Page<QuizThumbResponseDto> responseDtos = quizService.selectQuizPage(page-1, size, sortBy, isAsc);
+        Page<QuizThumbResponseDto> responseDtos = quizService.selectQuizPage(page - 1, size, sortBy, isAsc);
 
         return ResponseEntity.ok(responseDtos);
     }
@@ -78,5 +78,19 @@ public class QuizController {
         return ResponseEntity.ok().body(new ApiResponseDto(HttpStatus.OK.value(), quizId + "번 퀴즈가 삭제되었습니다."));
     }
 
+    @GetMapping("/quizzes/search")
+    public ResponseEntity<Page<QuizThumbResponseDto>> searchQuizzes(
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("sortBy") String sortBy,
+            @RequestParam("isAsc") boolean isAsc,
+            @RequestParam("author") String author,
+            @RequestParam("question") String question
+            ) {
+
+        Page<QuizThumbResponseDto> responseDtos = quizService.searchQuizzes(page - 1, size, sortBy, isAsc, author, question);
+
+        return ResponseEntity.ok().body(responseDtos);
+    }
 
 }

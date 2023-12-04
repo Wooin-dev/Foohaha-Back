@@ -4,6 +4,7 @@ import com.wooin.hahahaback.common.exception.NoAuthorizedException;
 import com.wooin.hahahaback.common.exception.NotFoundException;
 import com.wooin.hahahaback.quiz.dto.QuizRequestDto;
 import com.wooin.hahahaback.quiz.dto.QuizResponseDto;
+import com.wooin.hahahaback.quiz.dto.QuizSearchRequestDto;
 import com.wooin.hahahaback.quiz.dto.QuizThumbResponseDto;
 import com.wooin.hahahaback.quiz.entity.Quiz;
 import com.wooin.hahahaback.quiz.repository.QuizRepository;
@@ -88,6 +89,15 @@ public class QuizService {
     }
 
 
+    @Transactional(readOnly = true)
+    public Page<QuizThumbResponseDto> searchQuizzes(int page, int size, String sortBy, boolean isAsc, String author, String question) {
+        Pageable pageable = createPageable(page, size, sortBy, isAsc);
+        Page<Quiz> quizzes = quizRepository.searchQuizzes(pageable, author, question);
+        return getQuizThumbResponseDtoPage(quizzes);
+    }
+
+
+
     ////////////
     ///MyPage///
     ////////////
@@ -146,6 +156,14 @@ public class QuizService {
     }
 
     //Pagination
+    private Pageable createPageable(QuizSearchRequestDto requestDto) {
+        return createPageable(
+                requestDto.getPage(),
+                requestDto.getSize(),
+                requestDto.getSortBy(),
+                requestDto.getIsAsc());
+    }
+
     private Pageable createPageable(int page, int size, String sortBy, boolean isAsc) {
 
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;

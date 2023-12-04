@@ -15,8 +15,6 @@ jobs:
   build:
     name: Java CI with Gradle
     runs-on: ubuntu-latest
-
-
     steps:
 
       - name: Checkout
