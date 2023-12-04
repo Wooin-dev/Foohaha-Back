@@ -6,7 +6,7 @@ import com.wooin.hahahaback.mypage.dto.EditMyProfileRequestDto;
 import com.wooin.hahahaback.mypage.dto.MyProfileResponseDto;
 import com.wooin.hahahaback.mypage.service.MyPageService;
 import com.wooin.hahahaback.quiz.dto.QuizThumbResponseDto;
-import com.wooin.hahahaback.quiz.service.QuizServiceImpl;
+import com.wooin.hahahaback.quiz.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class MyPageController {
 
     private final MyPageService myPageService;
-    private final QuizServiceImpl quizService;
+    private final QuizService quizService;
 
 
     @GetMapping("/my-profile")

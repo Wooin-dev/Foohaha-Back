@@ -4,7 +4,7 @@ import com.wooin.hahahaback.common.exception.NotFoundException;
 import com.wooin.hahahaback.mypage.dto.EditMyProfileRequestDto;
 import com.wooin.hahahaback.mypage.dto.MyProfileResponseDto;
 import com.wooin.hahahaback.quiz.repository.QuizRepository;
-import com.wooin.hahahaback.quiz.service.QuizServiceImpl;
+import com.wooin.hahahaback.quiz.service.QuizService;
 import com.wooin.hahahaback.user.entity.User;
 import com.wooin.hahahaback.user.repository.UserRepository;
 import com.wooin.hahahaback.user.service.UserService;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MyPageService {
 
     private final UserDataService userDataService;
-    private final QuizServiceImpl quizService;
+    private final QuizService quizService;
     private final UserService userService;
     private final UserRepository userRepository;
     private final QuizRepository quizRepository;
