@@ -1,5 +1,6 @@
 package com.wooin.hahahaback.mypage.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.wooin.hahahaback.quiz.entity.QQuiz;
 import com.wooin.hahahaback.quiz.entity.Quiz;
@@ -19,100 +20,64 @@ public class MyPageRepositoryCustomImpl implements MyPageRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
+    QQuiz quiz = QQuiz.quiz;
+    QQuizUserData quizUserData = QQuizUserData.quizUserData;
+
     @Override
     public Page<Quiz> selectMyCheckedHintQuizzes(User user, Pageable pageable) {
 
-        QQuiz quiz = QQuiz.quiz;
-        QQuizUserData quizUserData = QQuizUserData.quizUserData;
-
-        List<Quiz> results = jpaQueryFactory
-                .select(quiz) // refactor select() 안에 Projection 객체를 넣어줄 수 있다
-                .from(quiz)
-                .join(quizUserData).on(quizUserData.quiz.eq(quiz))
-                .where(quizUserData.user.eq(user)
-                    .and(quizUserData.isShowHint.isTrue())
-                    .and(quizUserData.isSolved.isFalse())
-                )
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-
-        Long count = jpaQueryFactory
-                .select(quiz.count())
-                .from(quiz)
-                .join(quizUserData).on(quizUserData.quiz.eq(quiz))
-                .where(quizUserData.user.eq(user)
-                        .and(quizUserData.isShowHint.isTrue())
-                        .and(quizUserData.isSolved.isFalse())
-                )
-                .fetchOne();
-
-        assert count != null;
-        return new PageImpl<>(results, pageable, count);
+        return selectMyQuizzesWhereQuizUserData(pageable, eqMyCheckedHintQuiz(user));
     }
 
     @Override
     public Page<Quiz> selectMyTryQuizzes(User user, Pageable pageable) {
 
-        QQuiz quiz = QQuiz.quiz;
-        QQuizUserData quizUserData = QQuizUserData.quizUserData;
+        return selectMyQuizzesWhereQuizUserData(pageable, eqMyTryQuiz(user));
+    }
+
+    @Override
+    public Page<Quiz> selectMySolvedQuizzes(User user, Pageable pageable) {
+
+        return selectMyQuizzesWhereQuizUserData(pageable, eqMySolvedQuiz(user));
+    }
+
+
+    private Page<Quiz> selectMyQuizzesWhereQuizUserData(Pageable pageable, BooleanExpression expression) {
 
         List<Quiz> results = jpaQueryFactory
                 .select(quiz) // refactor select() 안에 Projection 객체를 넣어줄 수 있다
                 .from(quiz)
                 .join(quizUserData).on(quizUserData.quiz.eq(quiz))
-                .where(quizUserData.user.eq(user)
-                        .and(quizUserData.isNotNull())
-                        .and(quizUserData.isSolved.isFalse())
-                )
+                .where(expression)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
 
         Long count = jpaQueryFactory
                 .select(quiz.count())
                 .from(quiz)
                 .join(quizUserData).on(quizUserData.quiz.eq(quiz))
-                .where(quizUserData.user.eq(user)
-                        .and(quizUserData.isNotNull())
-                        .and(quizUserData.isSolved.isFalse())
-                )
+                .where(expression)
                 .fetchOne();
 
         assert count != null;
         return new PageImpl<>(results, pageable, count);
     }
 
-    @Override
-    public Page<Quiz> selectMySolvedQuizzes(User user, Pageable pageable) {
+    private BooleanExpression eqMySolvedQuiz(User user) {
+        return quizUserData.user.eq(user)
+                .and(quizUserData.isSolved.isTrue());
+    }
 
-        QQuiz quiz = QQuiz.quiz;
-        QQuizUserData quizUserData = QQuizUserData.quizUserData;
+    private BooleanExpression eqMyTryQuiz(User user) {
+        return quizUserData.user.eq(user)
+                .and(quizUserData.isNotNull())
+                .and(quizUserData.isSolved.isFalse());
+    }
 
-        List<Quiz> results = jpaQueryFactory
-                .select(quiz) // refactor select() 안에 Projection 객체를 넣어줄 수 있다
-                .from(quiz)
-                .join(quizUserData).on(quizUserData.quiz.eq(quiz))
-                .where(quizUserData.user.eq(user)
-                        .and(quizUserData.isSolved.isTrue())
-                )
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-
-        Long count = jpaQueryFactory
-                .select(quiz.count())
-                .from(quiz)
-                .join(quizUserData).on(quizUserData.quiz.eq(quiz))
-                .where(quizUserData.user.eq(user)
-                        .and(quizUserData.isSolved.isTrue())
-                )
-                .fetchOne();
-
-        assert count != null;
-        return new PageImpl<>(results, pageable, count);
+    private BooleanExpression eqMyCheckedHintQuiz(User user) {
+        return quizUserData.user.eq(user)
+                .and(quizUserData.isShowHint.isTrue())
+                .and(quizUserData.isSolved.isFalse());
     }
 }
