@@ -77,7 +77,7 @@ public class MyPageRepositoryCustomImpl implements MyPageRepositoryCustom {
 
     private BooleanExpression eqMyCheckedHintQuiz(User user) {
         return quizUserData.user.eq(user)
-                .and(quizUserData.isShowHint.isTrue())
+                .and(quizUserData.isCheckedHint.isTrue())
                 .and(quizUserData.isSolved.isFalse());
     }
 }

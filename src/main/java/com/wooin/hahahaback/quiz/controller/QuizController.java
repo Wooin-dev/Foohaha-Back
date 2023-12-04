@@ -5,6 +5,7 @@ import com.wooin.hahahaback.common.security.UserDetailsImpl;
 import com.wooin.hahahaback.quiz.dto.QuizRequestDto;
 import com.wooin.hahahaback.quiz.dto.QuizResponseDto;
 import com.wooin.hahahaback.quiz.dto.QuizThumbResponseDto;
+import com.wooin.hahahaback.quiz.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

@@ -18,7 +18,7 @@ public class QuizUserData extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    Boolean isShowHint;
+    Boolean isCheckedHint;
     Boolean isSolved;
 
     @ManyToOne
@@ -31,12 +31,12 @@ public class QuizUserData extends Timestamped {
     public QuizUserData(Quiz quiz, User user) {
         this.quiz = quiz;
         this.user = user;
-        this.isShowHint = false;
+        this.isCheckedHint = false;
         this.isSolved = false;
     }
 
     public void showHint() {
-        this.isShowHint = true;
+        this.isCheckedHint = true;
     }
     public void solveQuiz() {
         this.isSolved = true;
