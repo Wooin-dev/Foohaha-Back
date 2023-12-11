@@ -74,12 +74,6 @@ public class WebSecurityConfig {
 
         );
 
-//        http.formLogin((formLogin) ->
-//                formLogin
-//                        .defaultSuccessUrl("/")
-//                        .permitAll()
-//        );
-
         // 필터 관리
         http.addFilter(corsConfig.corsFilter());
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
