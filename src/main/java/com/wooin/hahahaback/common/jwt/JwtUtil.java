@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -95,15 +96,23 @@ public class JwtUtil {
             log.info("refreshToken : " + refreshToken);
 
 
-            // 쿠키 생성
-            Cookie accessTokenCookie = new Cookie(AUTHORIZATION_HEADER, tokenSpaceEncode(accessToken)); // Name-Value
-            accessTokenCookie.setPath("/");
-            Cookie refreshTokenCookie = new Cookie(REFRESH_TOKEN_HEADER, tokenSpaceEncode(refreshToken)); // Name-Value
-            refreshTokenCookie.setPath("/"); // 유효기간은 토큰만료시간이 있어서 따로 설정은 우선 안했습니다.
+            ResponseCookie accessTokenCookie = ResponseCookie.from(AUTHORIZATION_HEADER, tokenSpaceEncode(accessToken))
+                    .httpOnly(false)
+                    .path("/")
+                    .secure(true)
+                    .sameSite("None")
+                    .build();
+
+            ResponseCookie refreshTokenCookie = ResponseCookie.from(REFRESH_TOKEN_HEADER, tokenSpaceEncode(refreshToken))
+                    .httpOnly(true)
+                    .path("/")
+                    .secure(true)
+                    .sameSite("None")
+                    .build();
 
             // Response 객체에 Cookie 추가
-            res.addCookie(accessTokenCookie);
-            res.addCookie(refreshTokenCookie);
+            res.addHeader("Set-Cookie", accessTokenCookie.toString());
+            res.addHeader("Set-Cookie", refreshTokenCookie.toString());
 
             // Redis서버에 토큰값 쌍 저장. 유저정보를 키로 지정.
             tokenInfoRepository.save(new TokenInfo(username, accessToken, refreshToken));

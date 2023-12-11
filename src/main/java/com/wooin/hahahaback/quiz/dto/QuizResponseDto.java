@@ -1,9 +1,16 @@
 package com.wooin.hahahaback.quiz.dto;
 
 import com.wooin.hahahaback.quiz.entity.Quiz;
+import com.wooin.hahahaback.reply.dto.ReplyResponseDto;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class QuizResponseDto {
 
     private Long quizId;
@@ -12,9 +19,15 @@ public class QuizResponseDto {
     private String answer;
     private String description;
 
-//    private String submitter;
+    private LocalDateTime createdAt;
+
+    private Integer likesCnt;
+
+    private Long authorId;
+    private String author;
 
 //    private int totalScore;
+    private List<ReplyResponseDto> replies;
 
 
     public QuizResponseDto(Quiz quiz) {
@@ -24,9 +37,13 @@ public class QuizResponseDto {
         this.hint = quiz.getHint();
         this.answer = quiz.getAnswer();
         this.description = quiz.getDescription();
+        this.createdAt = quiz.getCreatedAt();
 
-//        this.submitter = quiz.getUser().getNickname();
+        this.likesCnt = quiz.getLikeCount();
 
-//        this.totalScore = 0;
+        this.authorId = quiz.getUser().getId();
+        this.author = quiz.getUser().getNickname();
+
+        this.replies = quiz.getReplys().stream().map(ReplyResponseDto::new).toList();
     }
 }

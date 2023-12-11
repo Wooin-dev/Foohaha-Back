@@ -1,15 +1,15 @@
 package com.wooin.hahahaback.user.entity;
 
 import com.wooin.hahahaback.common.entity.Timestamped;
+import com.wooin.hahahaback.mypage.dto.EditMyProfileRequestDto;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name = "users")
 public class User extends Timestamped {
 
@@ -34,6 +34,8 @@ public class User extends Timestamped {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    private Long kakaoId;
+
 
     ////생성자
     @Builder
@@ -43,6 +45,26 @@ public class User extends Timestamped {
         this.email = email;
         this.nickname = nickname;
         this.role = role;
+    }
+
+    public User(String username, String password, String email, String nickname, UserRoleEnum role, Long kakaoId) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.nickname = nickname;
+        this.role = role;
+        this.kakaoId = kakaoId;
+    }
+
+    ////서비스 메소드
+    public User kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
+    }
+
+    public User editUser(EditMyProfileRequestDto requestDto) {
+        this.nickname = requestDto.getNickname();
+        return this;
     }
 
 
