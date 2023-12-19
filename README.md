@@ -49,8 +49,8 @@
 
 ## View
 <div style="display:flex">
-  <img src="https://github.com/Wooin-dev/Foohaha-Back/assets/133616377/76b15b55-8b34-441b-a208-320644e1e638" height="450">
-  <img src="https://github.com/Wooin-dev/Foohaha-Back/assets/133616377/d25f0db0-b804-4b10-817f-2f9d646d2f42" height="450">
+  <img src="https://github.com/Wooin-dev/Foohaha-Back/assets/133616377/76b15b55-8b34-441b-a208-320644e1e638" height="400">
+  <img src="https://github.com/Wooin-dev/Foohaha-Back/assets/133616377/d25f0db0-b804-4b10-817f-2f9d646d2f42" height="400">
 </div>
 
 
