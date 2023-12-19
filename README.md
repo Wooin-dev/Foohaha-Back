@@ -1,14 +1,14 @@
-# HAHAHA-Back
-하하하 웹 제작 백엔드
-<br><br>
+# FOOHAHA-Back
+### Introduce
+**푸하하 웹 사이트 백엔드**
+<p>정답과 힌트를 갖고 있는 퀴즈 게시판입니다.</p>
+<p>퀴즈와 댓글에 좋아요 개념의 푸하하를 등록할 수 있습니다. <br>또한 각 퀴즈별 정답률, 힌트열람률 등과 각 유저의 맞춘 문제들 도전한 문제들 등의 데이터를 마이페이지에서 확인할 수 있습니다.</p>
 
-## ERD
-https://lucid.app/lucidchart/ec2b6080-9697-4771-9254-20e8d4458497/edit?viewport_loc=-1136%2C-664%2C2815%2C976%2C0_0&invitationId=inv_ad146077-8791-417e-912d-c6b2ffaab88f
-<br><br>
+[사이트 Link](https://wooin-dev.github.io/foohaha/)
 
----
-# 🏁 MileStone
-
+<details>
+ <summary>🏁 MileStone</summary>  
+  
 ## 🛹 init
 - 기본 CRUD 구현
 - 사용자 기능 추가
@@ -44,25 +44,21 @@ https://lucid.app/lucidchart/ec2b6080-9697-4771-9254-20e8d4458497/edit?viewport_
 - 유사 정답 체크 알고리즘 구성
 - 정답 확인 후 효과음
 - 공유기능 추가 (인스타 스토리용 자동 이미지 생성)
+</details>
+<br><br>
+
+## View
+<div style="display:flex">
+  <img src="https://github.com/Wooin-dev/Foohaha-Back/assets/133616377/76b15b55-8b34-441b-a208-320644e1e638" height="450">
+  <img src="https://github.com/Wooin-dev/Foohaha-Back/assets/133616377/d25f0db0-b804-4b10-817f-2f9d646d2f42" height="450">
+</div>
 
 
+## ERD
+<img src="https://github.com/Wooin-dev/Foohaha-Back/assets/133616377/44aeca8c-f587-45d6-a756-74f8e8dcbd22" width="700">
 
-<br><br><br>
+## Architecture
+<img src="https://github.com/Wooin-dev/Foohaha-Back/assets/133616377/498e77bf-7d6f-4e36-85cc-2b7956337639" width="700">
 
 ---
-# Update
 
-### 230806
-- 기본기능 제작
-- 문제가 출제되고 정답을 입력받아 결과가 출력.
-
-
-### 231001
-- 퀴즈 CRUD 구현
-- 프론트엔드 연결 완료 (Cors 설정 완료)
-- 힌트보기 기능, 정답/오답 확인 기능 구현
-
-### 231023
-- 로그인, 소셜로그인 구현
-- JWT를 통한 인증/인가 구현
-- 로그인 성공시 UserInfoDto를 전달하는 방식으로 변경.
