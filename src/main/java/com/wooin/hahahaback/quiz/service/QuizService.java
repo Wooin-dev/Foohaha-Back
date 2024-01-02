@@ -14,7 +14,6 @@ import com.wooin.hahahaback.user.repository.UserRepository;
 import com.wooin.hahahaback.userdata.repository.UserDataRepository;
 import com.wooin.hahahaback.userdata.service.UserDataService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -47,7 +46,6 @@ public class QuizService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "Quiz", key = "#quizId", unless = "#result==null")
     public QuizResponseDto selectOneQuiz(Long quizId) {
         return new QuizResponseDto(findQuizById(quizId));
     }
