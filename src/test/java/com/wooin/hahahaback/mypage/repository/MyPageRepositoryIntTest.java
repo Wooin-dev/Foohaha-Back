@@ -62,7 +62,7 @@ class MyPageRepositoryIntTest {
 
         //quiz1 -> 힌트열람 O 문제 풀이 O -> MySolvedQuiz
         quizUserDataService.getQuizUserData(savedTestUser, quiz1.getId());
-        quizUserDataService.showHint(savedTestUser, quiz1.getId());
+        quizUserDataService.checkHint(savedTestUser, quiz1.getId());
         quizUserDataService.solveQuiz(savedTestUser, quiz1.getId());
 
         //quiz2 -> 힌트열람 X 문제 풀이 O -> MySolvedQuiz
@@ -71,7 +71,7 @@ class MyPageRepositoryIntTest {
 
         //quiz3 -> 힌트열람 O 문제 풀이 X -> MyCheckedHintQuiz
         quizUserDataService.getQuizUserData(savedTestUser, quiz3.getId());
-        quizUserDataService.showHint(savedTestUser, quiz3.getId());
+        quizUserDataService.checkHint(savedTestUser, quiz3.getId());
 
         //quiz4 -> 힌트열람 X 문제풀이 X -> MyTryQuiz
         quizUserDataService.getQuizUserData(savedTestUser, quiz4.getId());

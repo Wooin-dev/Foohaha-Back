@@ -3,6 +3,7 @@ package com.wooin.hahahaback.like.controller;
 import com.wooin.hahahaback.common.dto.ApiResponseDto;
 import com.wooin.hahahaback.common.security.UserDetailsImpl;
 import com.wooin.hahahaback.like.service.LikeService;
+import com.wooin.hahahaback.quizUserData.service.QuizUserDataService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,34 +14,27 @@ import org.springframework.web.bind.annotation.*;
 public class LikeController {
 
     private final LikeService likeService;
+    private final QuizUserDataService quizUserDataService;
 
-    public LikeController(LikeService likeService) {
+    public LikeController(LikeService likeService, QuizUserDataService quizUserDataService) {
         this.likeService = likeService;
+        this.quizUserDataService = quizUserDataService;
     }
 
-    @GetMapping("/likes/quizzes/is-liked/{id}")
-    public ResponseEntity<Boolean> isLikedQuiz(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                      @PathVariable(value = "id") Long quizId) {
+    @GetMapping("/likes/quizzes/{id}/do-like")
+    public ResponseEntity doLikeQuiz(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                     @PathVariable(value = "id") Long quizId) {
 
-        Boolean result = likeService.isLikedQuiz(userDetails.getUser(), quizId);
-
-        return ResponseEntity.ok().body(result);
-    }
-
-    @GetMapping("/likes/quizzes/{id}")
-    public ResponseEntity likeQuiz(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                   @PathVariable(value = "id") Long quizId) {
-
-        likeService.likeQuiz(userDetails.getUser(), quizId);
+        quizUserDataService.doLikeQuiz(userDetails.getUser(), quizId);
 
         return ResponseEntity.ok().body(new ApiResponseDto(HttpStatus.CREATED.value(), quizId+"번 퀴즈 좋아요를 눌렀습니다."));
     }
 
-    @DeleteMapping("/likes/quizzes/{id}")
+    @GetMapping("/likes/quizzes/{id}/cancle-like")
     public ResponseEntity likeCancleQuiz(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                    @PathVariable(value = "id") Long quizId) {
 
-        likeService.likeCancleQuiz(userDetails.getUser(), quizId);
+        quizUserDataService.cancleLikeQuiz(userDetails.getUser(), quizId);
 
         return ResponseEntity.ok().body(new ApiResponseDto(HttpStatus.OK.value(), quizId+"번 퀴즈 좋아요를 취소했습니다."));
     }

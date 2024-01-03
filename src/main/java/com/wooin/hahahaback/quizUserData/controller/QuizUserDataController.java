@@ -35,7 +35,7 @@ public class QuizUserDataController {
     public ResponseEntity<ApiResponseDto> showHint(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                    @PathVariable(value = "id") Long quizId) {
 
-        quizUserDataService.showHint(userDetails.getUser(), quizId);
+        quizUserDataService.checkHint(userDetails.getUser(), quizId);
 
         return ResponseEntity.ok().body(new ApiResponseDto(HttpStatus.OK.value(), quizId+"번 퀴즈의 힌트를 확인했습니다."));
     }

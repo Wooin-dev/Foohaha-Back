@@ -20,11 +20,12 @@ public class QuizUserData extends Timestamped {
 
     Boolean isCheckedHint;
     Boolean isSolved;
+    Boolean isLiked;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Quiz quiz;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @Builder
@@ -33,12 +34,21 @@ public class QuizUserData extends Timestamped {
         this.user = user;
         this.isCheckedHint = false;
         this.isSolved = false;
+        this.isLiked = false;
     }
 
-    public void showHint() {
+    public void checkHint() {
         this.isCheckedHint = true;
     }
     public void solveQuiz() {
         this.isSolved = true;
+    }
+    public void doLike() {
+        this.isLiked = true;
+        this.quiz.hitLikeCount();
+    }
+    public void cancleLike() {
+        this.isLiked = false;
+        this.quiz.cancleLikeCount();
     }
 }

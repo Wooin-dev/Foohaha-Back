@@ -46,9 +46,9 @@ public class QuizUserDataService {
     }
 
     @Transactional
-    public void showHint(User user, Long quizId) {
+    public void checkHint(User user, Long quizId) {
         QuizUserData foundQuizUserData = findQuizUserData(user, quizId);
-        foundQuizUserData.showHint();
+        foundQuizUserData.checkHint();
         userDataService.countShowHint(user);
     }
 
@@ -57,6 +57,18 @@ public class QuizUserDataService {
         QuizUserData foundQuizUserData = findQuizUserData(user, quizId);
         foundQuizUserData.solveQuiz();
         userDataService.countSolveQuiz(user);
+    }
+
+    @Transactional
+    public void doLikeQuiz(User user, Long quizId) {
+        QuizUserData foundQuizUserData = findQuizUserData(user, quizId);
+        foundQuizUserData.doLike();
+    }
+
+    @Transactional
+    public void cancleLikeQuiz(User user, Long quizId) {
+        QuizUserData foundQuizUserData = findQuizUserData(user, quizId);
+        foundQuizUserData.cancleLike();
     }
 
     private QuizUserData findQuizUserData(User user, Long quizId) {

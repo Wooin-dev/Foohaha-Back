@@ -12,9 +12,12 @@ public class QuizUserDataResponseDto {
 
     private Boolean isSolved;
 
+    private Boolean isLiked;
+
     public QuizUserDataResponseDto(QuizUserData savedQuizUserData) {
         this.id = savedQuizUserData.getId();
         this.isShowHint = savedQuizUserData.getIsCheckedHint();
         this.isSolved = savedQuizUserData.getIsSolved();
+        this.isLiked = savedQuizUserData.getIsLiked();
     }
 }
